@@ -3,30 +3,96 @@
  */
 import type { ItemDefinition } from "@game/catalog/types";
 
+export type Rarity = "common" | "luxe" | "icon" | "couture";
+
 export interface FamilyTheme {
   readonly accent: string;
   readonly glow: string;
+  readonly wash: string;
   readonly mark: string;
+  readonly label: string;
 }
 
 export const FAMILY_THEMES: Readonly<Record<string, FamilyTheme>> = {
-  beauty: { accent: "#ff4d8d", glow: "rgba(255, 77, 141, 0.35)", mark: "✦" },
-  fashion: { accent: "#c44dff", glow: "rgba(196, 77, 255, 0.35)", mark: "✿" },
-  jewelry: { accent: "#e8b86d", glow: "rgba(232, 184, 109, 0.4)", mark: "◆" },
-  real_estate: { accent: "#6ec8ff", glow: "rgba(110, 200, 255, 0.35)", mark: "▣" },
-  nightlife: { accent: "#7b5cff", glow: "rgba(123, 92, 255, 0.4)", mark: "✺" },
-  automobiles: { accent: "#2ec9b5", glow: "rgba(46, 201, 181, 0.35)", mark: "▸" },
+  beauty: {
+    accent: "#ff4d8d",
+    glow: "rgba(255, 77, 141, 0.4)",
+    wash: "#ffe0ec",
+    mark: "✦",
+    label: "Beauty",
+  },
+  fashion: {
+    accent: "#c44dff",
+    glow: "rgba(196, 77, 255, 0.4)",
+    wash: "#f3e0ff",
+    mark: "✿",
+    label: "Fashion",
+  },
+  jewelry: {
+    accent: "#d4a017",
+    glow: "rgba(212, 160, 23, 0.45)",
+    wash: "#fff1cc",
+    mark: "◆",
+    label: "Jewelry",
+  },
+  real_estate: {
+    accent: "#2b9adf",
+    glow: "rgba(43, 154, 223, 0.4)",
+    wash: "#dcefff",
+    mark: "▣",
+    label: "Real Estate",
+  },
+  nightlife: {
+    accent: "#6a4dff",
+    glow: "rgba(106, 77, 255, 0.45)",
+    wash: "#e6deff",
+    mark: "✺",
+    label: "Nightlife",
+  },
+  automobiles: {
+    accent: "#0f9f8a",
+    glow: "rgba(15, 159, 138, 0.4)",
+    wash: "#d4f6ef",
+    mark: "▸",
+    label: "Automobiles",
+  },
 };
 
 export const DEFAULT_THEME: FamilyTheme = {
   accent: "#ff2e8a",
   glow: "rgba(255, 46, 138, 0.3)",
+  wash: "#ffe8f2",
   mark: "★",
+  label: "Look",
 };
 
 export function themeFor(item: ItemDefinition | undefined): FamilyTheme {
   if (!item) return DEFAULT_THEME;
   return FAMILY_THEMES[item.familyId] ?? DEFAULT_THEME;
+}
+
+export function themeForFamily(familyId: string): FamilyTheme {
+  return FAMILY_THEMES[familyId] ?? DEFAULT_THEME;
+}
+
+export function rarityForTier(tier: number): Rarity {
+  if (tier >= 5) return "couture";
+  if (tier >= 4) return "icon";
+  if (tier >= 3) return "luxe";
+  return "common";
+}
+
+export function rarityLabel(rarity: Rarity): string {
+  switch (rarity) {
+    case "couture":
+      return "Couture";
+    case "icon":
+      return "Icon";
+    case "luxe":
+      return "Luxe";
+    default:
+      return "Rising";
+  }
 }
 
 export function formatEnergy(current: number, max: number): string {

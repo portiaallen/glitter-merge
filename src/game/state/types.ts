@@ -42,6 +42,7 @@ export type GameAction =
   | { type: "STACK"; from: Coord; to: Coord }
   | { type: "MERGE_CELL"; at: Coord }
   | { type: "COLLECT_GENERATOR"; generatorId: string; to: Coord | null }
+  | { type: "RECLAIM"; inventoryIndex: number; to: Coord | null }
   | { type: "GRANT"; currencyId: string; amount: number }
   | { type: "RESET" };
 
@@ -56,13 +57,22 @@ export type GameEventKind =
   | "collect_failed"
   | "ticked"
   | "granted"
-  | "reset";
+  | "reset"
+  | "discovered"
+  | "rewarded"
+  | "energy_failed"
+  | "reclaimed"
+  | "reclaim_failed";
 
 export interface GameEvent {
   readonly kind: GameEventKind;
   readonly message: string;
   readonly itemId?: ItemId;
   readonly count?: number;
+  readonly fiveMerges?: number;
+  readonly threeMerges?: number;
+  readonly currencyId?: string;
+  readonly amount?: number;
 }
 
 export interface ReduceResult {
@@ -73,4 +83,12 @@ export interface ReduceResult {
 export function touch(state: GameState, now: number): GameState {
   if (state.updatedAt === now) return state;
   return { ...state, updatedAt: now };
+}
+
+export function eventWith(
+  kind: GameEventKind,
+  message: string,
+  extra: Omit<GameEvent, "kind" | "message"> = {},
+): GameEvent {
+  return { kind, message, ...extra };
 }

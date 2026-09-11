@@ -104,7 +104,7 @@ export function createInitialState(
       energy: {
         current: 25,
         max: 25,
-        regenPerMs: 1 / 60_000,
+        regenPerMs: 1 / 20_000,
         lastUpdatedAt: now,
       },
     },
