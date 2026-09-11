@@ -68,7 +68,8 @@ The catalog is a read-only index built once from data. The reducer never hard-co
 | `MOVE` | Move a stack to an empty cell |
 | `STACK` | Combine identical stacks |
 | `MERGE_CELL` | Apply 3/5/N merge rules to a stack |
-| `COLLECT_GENERATOR` | Place one stored product on the board |
+| `COLLECT_GENERATOR` | Place one stored product on the board (**1 Energy**) |
+| `RECLAIM` | Move an overflow vault item onto an empty cell only |
 | `GRANT` | Economy hook for later rewards |
 | `RESET` | New local game |
 

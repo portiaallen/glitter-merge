@@ -10,7 +10,10 @@ import {
 import type { Coord, ItemInstance } from "../board/types";
 import { coordsEqual } from "../board/types";
 import { discover } from "../collection/collection";
-import { grant, tickEconomy } from "../economy/economy";
+import { CURRENCY_IDS } from "../data/currencies";
+import { COLLECT_ENERGY_COST } from "../economy/costs";
+import { grant, spendEnergy, tickEconomy } from "../economy/economy";
+import { mergeCashReward } from "../economy/rewards";
 import { planMerge } from "../merge/engine";
 import {
   getTimer,
@@ -22,6 +25,7 @@ import {
 import { createInitialState } from "./initial";
 import { spawnInstances } from "./spawn";
 import {
+  eventWith,
   touch,
   type GameAction,
   type GameContext,
@@ -79,6 +83,11 @@ function discoverFromBoard(state: GameState): GameState {
   return { ...state, collection };
 }
 
+function newlyDiscovered(before: GameState, after: GameState): string[] {
+  const known = new Set(before.collection.discoveredItemIds);
+  return after.collection.discoveredItemIds.filter((id) => !known.has(id));
+}
+
 function placeOrInventory(
   state: GameState,
   items: readonly ItemInstance[],
@@ -109,6 +118,16 @@ function placeOrInventory(
   return { ...state, board, inventory };
 }
 
+function discoveryEvents(before: GameState, after: GameState, ctx: GameContext): GameEvent[] {
+  return newlyDiscovered(before, after).map((itemId) => {
+    const item = ctx.catalog.getItem(itemId);
+    return eventWith("discovered", `NEW DISCOVERY · ${item?.name ?? itemId}`, {
+      itemId,
+      count: 1,
+    });
+  });
+}
+
 function applyMergeCell(
   state: GameState,
   at: Coord,
@@ -117,7 +136,7 @@ function applyMergeCell(
   const cell = getCell(state.board, at);
   if (!cell || cell.items.length === 0) {
     return withEvents(state, [
-      { kind: "merge_failed", message: "Nothing to merge here." },
+      eventWith("merge_failed", "Nothing to merge here."),
     ]);
   }
 
@@ -125,15 +144,14 @@ function applyMergeCell(
   const plan = planMerge(itemIds, ctx.catalog);
   if (!plan.valid || !plan.sourceItemId) {
     return withEvents(state, [
-      {
-        kind: "merge_failed",
-        message:
-          plan.reason === "too_few"
-            ? "Stack 3 of the same look to merge. Stack 5 for extra glam."
-            : plan.reason === "max_tier"
-              ? "This look is already couture — no higher tier."
-              : "That merge is not valid.",
-      },
+      eventWith(
+        "merge_failed",
+        plan.reason === "too_few"
+          ? "Stack 3 of the same look to merge. Stack 5 for extra glam."
+          : plan.reason === "max_tier"
+            ? "This look is already couture — no higher tier."
+            : "That merge is not valid.",
+      ),
     ]);
   }
 
@@ -150,6 +168,30 @@ function applyMergeCell(
   const leftoverOnCell = leftoverItems.length > 0;
   next = placeOrInventory(next, produced, leftoverOnCell ? null : at);
   next = discoverFromBoard(next);
+
+  const source = ctx.catalog.getItem(plan.sourceItemId);
+  const cash = mergeCashReward(
+    source?.tier ?? 1,
+    plan.fiveMerges,
+    plan.threeMerges,
+  );
+  const events: GameEvent[] = [];
+  if (cash > 0) {
+    const granted = grant(next.economy.wallet, CURRENCY_IDS.glitterCash, cash, ctx.catalog);
+    if (granted.ok) {
+      next = {
+        ...next,
+        economy: { ...next.economy, wallet: granted.value },
+      };
+      events.push(
+        eventWith("rewarded", `+${cash} Glitter Cash`, {
+          currencyId: CURRENCY_IDS.glitterCash,
+          amount: cash,
+        }),
+      );
+    }
+  }
+
   next = touch(next, ctx.clock.now());
 
   const producedLabel = plan.produced
@@ -161,17 +203,23 @@ function applyMergeCell(
 
   const producedItemId = plan.produced[0]?.itemId;
   const producedCount = plan.produced[0]?.count;
-  return withEvents(next, [
-    {
-      kind: "merged",
-      message:
-        plan.fiveMerges > 0
-          ? `Fabulous five-merge! ${producedLabel}.`
-          : `Merged into ${producedLabel}.`,
-      ...(producedItemId !== undefined ? { itemId: producedItemId } : {}),
-      ...(producedCount !== undefined ? { count: producedCount } : {}),
-    },
-  ]);
+  events.unshift(
+    eventWith(
+      "merged",
+      plan.fiveMerges > 0
+        ? `Fabulous five-merge! ${producedLabel}.`
+        : `Merged into ${producedLabel}.`,
+      {
+        ...(producedItemId !== undefined ? { itemId: producedItemId } : {}),
+        ...(producedCount !== undefined ? { count: producedCount } : {}),
+        fiveMerges: plan.fiveMerges,
+        threeMerges: plan.threeMerges,
+      },
+    ),
+  );
+  events.push(...discoveryEvents(state, next, ctx));
+
+  return withEvents(next, events);
 }
 
 function applyDrop(
@@ -184,16 +232,24 @@ function applyDrop(
     mode === "MOVE" ? moveItems(state.board, from, to) : stackItems(state.board, from, to);
   if (!result) {
     return withEvents(state, [
-      { kind: "drop_failed", message: "That space cannot take this look." },
+      eventWith("drop_failed", "That space cannot take this look."),
     ]);
   }
+  const stackedCount = getCell(result, to)?.items.length ?? 0;
   return withEvents(
     { ...state, board: result },
     [
-      {
-        kind: mode === "MOVE" ? "moved" : "stacked",
-        message: mode === "MOVE" ? "Moved." : "Stacked. Tap the stack to merge when ready.",
-      },
+      eventWith(
+        mode === "MOVE" ? "moved" : "stacked",
+        mode === "MOVE"
+          ? "Moved."
+          : stackedCount >= 5
+            ? "✨ 5 MERGE BONUS ready — tap Merge."
+            : stackedCount >= 3
+              ? "3 to merge — or keep stacking for a 5 bonus."
+              : "Stacked. Need 3 to merge, 5 for extra glam.",
+        { count: stackedCount },
+      ),
     ],
   );
 }
@@ -211,13 +267,28 @@ function applyCollect(
   const generator = index >= 0 ? state.generators[index] : undefined;
   if (!generator) {
     return withEvents(state, [
-      { kind: "collect_failed", message: "No generator found." },
+      eventWith("collect_failed", "No generator found."),
     ]);
   }
   const definition = ctx.catalog.getGenerator(generator.definitionId);
   if (!definition || generator.storedCount <= 0) {
     return withEvents(state, [
-      { kind: "collect_failed", message: "Nothing ready yet. Time is the ultimate luxury." },
+      eventWith(
+        "collect_failed",
+        "Nothing ready yet. Time is the ultimate luxury.",
+      ),
+    ]);
+  }
+
+  const now = ctx.clock.now();
+  const spent = spendEnergy(state.economy.energy, COLLECT_ENERGY_COST, now);
+  if (!spent.ok) {
+    return withEvents(state, [
+      eventWith(
+        "energy_failed",
+        "Energy is recovering. Merge what's already on the board.",
+        { amount: COLLECT_ENERGY_COST },
+      ),
     ]);
   }
 
@@ -226,12 +297,13 @@ function applyCollect(
   const item = spawned.instances[0];
   if (!item) {
     return withEvents(state, [
-      { kind: "collect_failed", message: "Could not create that item." },
+      eventWith("collect_failed", "Could not create that item."),
     ]);
   }
 
+  const preferredCell = to ? getCell(next.board, to) : undefined;
   const preferred =
-    to && getCell(next.board, to) && isEmptyCell(getCell(next.board, to)!)
+    to && preferredCell && isEmptyCell(preferredCell)
       ? to
       : findEmptyCells(next.board)[0] ?? null;
 
@@ -239,10 +311,14 @@ function applyCollect(
   const updatedGenerators = next.generators.map((entry, entryIndex) =>
     entryIndex === index ? { ...entry, storedCount: entry.storedCount - 1 } : entry,
   );
-  next = { ...next, generators: updatedGenerators };
+  next = {
+    ...next,
+    generators: updatedGenerators,
+    economy: { ...next.economy, energy: spent.value },
+  };
 
   const timer = getTimer(next.timers, generator.timerId);
-  if (timer && generator.storedCount - 1 < definition.maxStored && isComplete(timer, ctx.clock.now())) {
+  if (timer && generator.storedCount - 1 < definition.maxStored && isComplete(timer, now)) {
     next = {
       ...next,
       timers: upsertTimer(
@@ -252,17 +328,59 @@ function applyCollect(
     };
   }
 
+  const before = state;
   next = discoverFromBoard(next);
-  next = touch(next, ctx.clock.now());
+  next = touch(next, now);
 
   return withEvents(next, [
-    {
-      kind: "collected",
-      message: `Collected ${ctx.catalog.getItem(definition.outputItemId)?.name ?? "an item"}.`,
-      itemId: definition.outputItemId,
-      count: 1,
-    },
+    eventWith(
+      "collected",
+      `Collected ${ctx.catalog.getItem(definition.outputItemId)?.name ?? "an item"}.`,
+      { itemId: definition.outputItemId, count: 1, amount: COLLECT_ENERGY_COST },
+    ),
+    ...discoveryEvents(before, next, ctx),
   ]);
+}
+
+function applyReclaim(
+  state: GameState,
+  inventoryIndex: number,
+  to: Coord | null,
+): ReduceResult {
+  const item = state.inventory[inventoryIndex];
+  if (!item) {
+    return withEvents(state, [
+      eventWith("reclaim_failed", "Nothing in the vault to place."),
+    ]);
+  }
+
+  const dest = to ?? findEmptyCells(state.board)[0] ?? null;
+  if (!dest) {
+    return withEvents(state, [
+      eventWith("reclaim_failed", "The board is full. Merge to make space."),
+    ]);
+  }
+  const cell = getCell(state.board, dest);
+  if (!cell || !isEmptyCell(cell)) {
+    return withEvents(state, [
+      eventWith(
+        "reclaim_failed",
+        "Place vault looks onto empty tiles only — stacks stay as they are.",
+      ),
+    ]);
+  }
+
+  const inventory = state.inventory.filter((_, index) => index !== inventoryIndex);
+  const board = placeItems(state.board, dest, [item]);
+  return withEvents(
+    { ...state, board, inventory },
+    [
+      eventWith("reclaimed", "Placed a look back on the board.", {
+        itemId: item.itemId,
+        count: 1,
+      }),
+    ],
+  );
 }
 
 export function reduce(
@@ -274,7 +392,7 @@ export function reduce(
 
   switch (action.type) {
     case "TICK":
-      return withEvents(ticked, [{ kind: "ticked", message: "Time passed." }]);
+      return withEvents(ticked, [eventWith("ticked", "Time passed.")]);
     case "MOVE":
       return applyDrop(ticked, action.from, action.to, "MOVE");
     case "STACK":
@@ -283,6 +401,8 @@ export function reduce(
       return applyMergeCell(ticked, action.at, ctx);
     case "COLLECT_GENERATOR":
       return applyCollect(ticked, action.generatorId, action.to, ctx);
+    case "RECLAIM":
+      return applyReclaim(ticked, action.inventoryIndex, action.to);
     case "GRANT": {
       const granted = grant(
         ticked.economy.wallet,
@@ -292,7 +412,7 @@ export function reduce(
       );
       if (!granted.ok) {
         return withEvents(ticked, [
-          { kind: "granted", message: "Could not grant that currency." },
+          eventWith("granted", "Could not grant that currency."),
         ]);
       }
       return withEvents(
@@ -300,17 +420,17 @@ export function reduce(
           ...ticked,
           economy: { ...ticked.economy, wallet: granted.value },
         },
-        [{ kind: "granted", message: `Granted ${action.amount} ${action.currencyId}.` }],
+        [eventWith("granted", `Granted ${action.amount} ${action.currencyId}.`)],
       );
     }
     case "RESET":
       return withEvents(createInitialState(ctx.catalog, ctx.clock, state.seed), [
-        { kind: "reset", message: "A fresh Glitter City corner." },
+        eventWith("reset", "A fresh Glitter City corner."),
       ]);
     default: {
       const _exhaustive: never = action;
       return withEvents(state, [
-        { kind: "drop_failed", message: `Unhandled action: ${JSON.stringify(_exhaustive)}` },
+        eventWith("drop_failed", `Unhandled action: ${JSON.stringify(_exhaustive)}`),
       ]);
     }
   }

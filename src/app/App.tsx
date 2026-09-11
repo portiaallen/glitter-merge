@@ -1,15 +1,73 @@
-import { getCell, isEmptyCell } from "@game/index";
+import { useEffect, useState } from "react";
+import {
+  getCell,
+  isEmptyCell,
+  itemIdAt,
+  mergeCoach,
+  previewStack,
+  stackCountAt,
+  type Coord,
+} from "@game/index";
+import { playCue } from "./audio/cues";
 import { BoardView } from "./components/BoardView";
+import { CoachBanner } from "./components/CoachBanner";
+import { CollectionScreen } from "./components/CollectionScreen";
+import { DiscoveryModal } from "./components/DiscoveryModal";
+import { FeedbackBar } from "./components/FeedbackBar";
 import { GeneratorDock } from "./components/GeneratorDock";
 import { Hud } from "./components/Hud";
+import { InventoryTray } from "./components/InventoryTray";
 import { useGame } from "./hooks/useGame";
-import type { Coord } from "@game/index";
 
 export function App() {
   const { state, catalog, clock, events, selected, setSelected, dispatch, reset } =
     useGame();
-  const latest = events[events.length - 1];
-  const inventoryCount = state.inventory.length;
+  const [view, setView] = useState<"board" | "collection">("board");
+  const [vaultIndex, setVaultIndex] = useState<number | null>(null);
+  const [discoveryId, setDiscoveryId] = useState<string | null>(null);
+  const [burstAt, setBurstAt] = useState<Coord | null>(null);
+  const [burstBonus, setBurstBonus] = useState(false);
+
+  useEffect(() => {
+    const found = events.find((event) => event.kind === "discovered");
+    if (found?.itemId) {
+      setDiscoveryId(found.itemId);
+      playCue("discover");
+    }
+    const merged = events.find((event) => event.kind === "merged");
+    if (merged) {
+      playCue((merged.fiveMerges ?? 0) > 0 ? "merge5" : "merge3");
+    }
+    const collected = events.find((event) => event.kind === "collected");
+    if (collected) playCue("collect");
+    if (events.some((event) => event.kind === "energy_failed" || event.kind === "drop_failed")) {
+      playCue("error");
+    }
+  }, [events]);
+
+  useEffect(() => {
+    if (!discoveryId) return;
+    const id = window.setTimeout(() => setDiscoveryId(null), 2800);
+    return () => window.clearTimeout(id);
+  }, [discoveryId]);
+
+  const selectedCount = selected ? stackCountAt(state.board, selected) : 0;
+  const selectedItemId = selected ? itemIdAt(state.board, selected) : null;
+  const selectedItem = selectedItemId ? catalog.getItem(selectedItemId) : undefined;
+  const preview = selectedItem
+    ? previewStack(
+        selectedItem.id,
+        selectedCount,
+        catalog,
+        state.collection.discoveredItemIds,
+      )
+    : null;
+  const coach = selectedItem
+    ? mergeCoach(selectedCount, Boolean(catalog.nextTier(selectedItem.id)))
+    : {
+        tone: "idle" as const,
+        label: "Stack 3 of a look to merge. Stack 5 for extra glam.",
+      };
 
   const drop = (from: Coord, to: Coord) => {
     const target = getCell(state.board, to);
@@ -18,13 +76,68 @@ export function App() {
       dispatch({ type: "MOVE", from, to });
       return;
     }
-    dispatch({ type: "STACK", from, to });
+    const result = dispatch({ type: "STACK", from, to });
+    const stacked = result.events.find((event) => event.kind === "stacked");
+    if (stacked && (stacked.count ?? 0) >= 3) {
+      setBurstAt(to);
+      setBurstBonus((stacked.count ?? 0) >= 5);
+      window.setTimeout(() => setBurstAt(null), 700);
+    }
   };
+
+  const mergeAt = (at: Coord) => {
+    const result = dispatch({ type: "MERGE_CELL", at });
+    if (result.events.some((event) => event.kind === "merged")) {
+      setBurstAt(at);
+      setBurstBonus(result.events.some((event) => (event.fiveMerges ?? 0) > 0));
+      window.setTimeout(() => setBurstAt(null), 900);
+      setSelected(at);
+    }
+  };
+
+  const handleBoardSelect = (coord: Coord | null) => {
+    if (coord && vaultIndex !== null) {
+      const cell = getCell(state.board, coord);
+      if (cell && isEmptyCell(cell)) {
+        dispatch({ type: "RECLAIM", inventoryIndex: vaultIndex, to: coord });
+        setVaultIndex(null);
+        setSelected(null);
+        return;
+      }
+    }
+    setVaultIndex(null);
+    setSelected(coord);
+  };
+
+  if (view === "collection") {
+    return (
+      <div className="shell">
+        <div className="rainbow" aria-hidden="true" />
+        <CollectionScreen
+          state={state}
+          catalog={catalog}
+          onClose={() => setView("board")}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="shell">
       <div className="rainbow" aria-hidden="true" />
-      <Hud state={state} catalog={catalog} />
+      <Hud state={state} catalog={catalog} onOpenCollection={() => setView("collection")} />
+      <CoachBanner hint={coach} preview={preview?.hint ?? null} />
+      <BoardView
+        state={state}
+        catalog={catalog}
+        selected={selected}
+        burstAt={burstAt}
+        burstBonus={burstBonus}
+        reclaimMode={vaultIndex !== null}
+        onSelect={handleBoardSelect}
+        onDrop={drop}
+        onMerge={mergeAt}
+      />
       <GeneratorDock
         state={state}
         catalog={catalog}
@@ -37,33 +150,26 @@ export function App() {
           })
         }
       />
-      <p className="help">
-        Drag matching looks onto each other, or tap to select then tap a
-        destination. Stack <strong>3</strong> to merge, <strong>5</strong> for
-        extra glam.
-      </p>
-      <BoardView
+      <InventoryTray
         state={state}
         catalog={catalog}
-        selected={selected}
-        onSelect={setSelected}
-        onDrop={drop}
-        onMerge={(at) => dispatch({ type: "MERGE_CELL", at })}
+        selectedIndex={vaultIndex}
+        onSelect={setVaultIndex}
+        onReclaim={(index, to) => dispatch({ type: "RECLAIM", inventoryIndex: index, to })}
       />
-      {inventoryCount > 0 ? (
-        <p className="inventory-note" role="status">
-          Overflow vault: {inventoryCount} look
-          {inventoryCount === 1 ? "" : "s"} waiting for an open tile.
-        </p>
-      ) : null}
+      <FeedbackBar events={events} />
       <footer className="footer">
-        <p className="status" role="status">
-          {latest?.message ?? "Welcome to Glitter Neighborhood."}
-        </p>
         <button type="button" className="btn ghost" onClick={reset}>
           New Game
         </button>
       </footer>
+      {discoveryId ? (
+        <DiscoveryModal
+          itemId={discoveryId}
+          catalog={catalog}
+          onDismiss={() => setDiscoveryId(null)}
+        />
+      ) : null}
     </div>
   );
 }

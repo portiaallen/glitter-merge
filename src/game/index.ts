@@ -23,6 +23,8 @@ export { GENERATOR_IDS } from "./data/generators";
 export { AREA_IDS } from "./data/areas";
 
 export { planMerge, planMergeCount, canMerge } from "./merge/engine";
+export { previewStack } from "./merge/preview";
+export type { MergePreview } from "./merge/preview";
 export {
   MIN_MERGE_COUNT,
   BONUS_MERGE_COUNT,
@@ -38,10 +40,21 @@ export {
   isEmptyCell,
   cellItemId,
 } from "./board/board";
+export {
+  describeDrop,
+  matchingCoords,
+  mergeCoach,
+  stackCountAt,
+  itemIdAt,
+  potentialMatchCount,
+} from "./board/intent";
+export type { DropKind, CoachHint, CoachTone } from "./board/intent";
 export type { BoardState, BoardCell, Coord, ItemInstance } from "./board/types";
 export { coordsEqual } from "./board/types";
 
 export { grant, spend, canAfford, tickEnergy, spendEnergy } from "./economy/economy";
+export { COLLECT_ENERGY_COST } from "./economy/costs";
+export { mergeCashReward } from "./economy/rewards";
 export type { EconomyState, WalletState, EnergyState } from "./economy/types";
 export { walletBalance } from "./economy/types";
 
@@ -79,5 +92,7 @@ export { SAVE_KEY } from "./persistence/types";
 export type { PersistenceAdapter, PersistedSave } from "./persistence/types";
 
 export { isDiscovered } from "./collection/collection";
+export { familyProgress } from "./collection/progress";
 export type { CollectionState } from "./collection/collection";
+export type { FamilyProgress, FamilyProgressEntry } from "./collection/progress";
 export { isAreaUnlocked } from "./world/world";
