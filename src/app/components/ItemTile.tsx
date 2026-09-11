@@ -85,7 +85,7 @@ export function ItemTile({
         {theme.mark}
       </span>
       <span className="tier">
-        T{item.tier} · {rarityLabel(rarity)}
+        {size === "board" || size === "tray" ? `T${item.tier}` : `T${item.tier} · ${rarityLabel(rarity)}`}
       </span>
       <span className="name">{item.shortName}</span>
       {count > 1 ? <span className="stack">{count}</span> : null}

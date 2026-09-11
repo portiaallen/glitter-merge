@@ -91,7 +91,7 @@ export function App() {
       setBurstAt(at);
       setBurstBonus(result.events.some((event) => (event.fiveMerges ?? 0) > 0));
       window.setTimeout(() => setBurstAt(null), 900);
-      setSelected(at);
+      setSelected(null);
     }
   };
 

@@ -167,16 +167,12 @@ export function BoardView({
             const drop = dragging ? describeDrop(state.board, dragging, coord) : null;
             const valid =
               isMatch ||
-              (Boolean(selected) && count === 0) ||
               (reclaimMode && count === 0) ||
               drop === "move" ||
               drop === "stack";
-            const invalid =
-              Boolean(selected || dragging) &&
-              !isSelected &&
-              count > 0 &&
-              !isMatch &&
-              drop !== "stack";
+            const invalid = Boolean(
+              dragging && drop === "invalid" && !isDragging,
+            );
             const preview = item
               ? previewStack(
                   item.id,
@@ -241,13 +237,15 @@ export function BoardView({
                   {...(preview?.canMerge ? { onMerge: () => onMerge(coord) } : {})}
                 />
                 {isMatch ? <span className="dest-label">Match</span> : null}
-                {selected && count === 0 ? (
+                {dragging && drop === "move" ? (
                   <span className="dest-label move">Move</span>
                 ) : null}
                 {reclaimMode && count === 0 ? (
                   <span className="dest-label move">Place</span>
                 ) : null}
-                {invalid ? <span className="dest-label no">Can't</span> : null}
+                {dragging && drop === "invalid" && !isDragging ? (
+                  <span className="dest-label no">Can't</span>
+                ) : null}
               </div>
             );
           }),
