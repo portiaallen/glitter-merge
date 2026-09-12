@@ -46,7 +46,10 @@ export function CollectionScreen({ state, catalog, onClose }: CollectionScreenPr
                   {entry.entries.map((tier) => (
                     <li key={tier.item.id}>
                       {tier.discovered ? (
-                        <ItemTile item={tier.item} size="collection" />
+                        <>
+                          <ItemTile item={tier.item} size="collection" />
+                          <span className="collection-caption">{tier.item.name}</span>
+                        </>
                       ) : (
                         <ItemTile
                           item={null}
@@ -55,9 +58,6 @@ export function CollectionScreen({ state, catalog, onClose }: CollectionScreenPr
                           size="collection"
                         />
                       )}
-                      <span className="collection-caption">
-                        {tier.discovered ? tier.item.name : `Tier ${tier.item.tier}`}
-                      </span>
                     </li>
                   ))}
                 </ol>
