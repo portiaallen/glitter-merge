@@ -10,15 +10,18 @@ import {
 } from "@game/index";
 import { playCue } from "./audio/cues";
 import { BoardView } from "./components/BoardView";
-import { CoachBanner } from "./components/CoachBanner";
+import { CityBrief } from "./components/CityBrief";
 import { CollectionScreen } from "./components/CollectionScreen";
 import { DiscoveryModal } from "./components/DiscoveryModal";
 import { FeedbackBar } from "./components/FeedbackBar";
 import { GeneratorDock } from "./components/GeneratorDock";
 import { Hud } from "./components/Hud";
 import { InventoryTray } from "./components/InventoryTray";
+import { destinationBrief } from "./destination/brief";
+import { neighborhoodVenues, venueOpenedByItem } from "./destination/landmarks";
 import { useGame } from "./hooks/useGame";
 import { Environment } from "./world/Environment";
+import { Neighborhood } from "./world/Neighborhood";
 
 export function App() {
   const { state, catalog, clock, events, selected, setSelected, dispatch, reset } =
@@ -65,10 +68,10 @@ export function App() {
     : null;
   const coach = selectedItem
     ? mergeCoach(selectedCount, Boolean(catalog.nextTier(selectedItem.id)))
-    : {
-        tone: "idle" as const,
-        label: "Stack 3 matching jewels. Keep 5 for a bonus.",
-      };
+    : null;
+  const brief = destinationBrief(state, catalog);
+  const venues = neighborhoodVenues(state, catalog);
+  const openedVenue = discoveryId ? venueOpenedByItem(discoveryId, catalog, state) : null;
 
   const drop = (from: Coord, to: Coord) => {
     const target = getCell(state.board, to);
@@ -116,18 +119,23 @@ export function App() {
       <div className="stage-ui">
         <Hud state={state} catalog={catalog} onOpenCollection={() => setView("collection")} />
         <div className="grounds">
-          <CoachBanner hint={coach} preview={preview?.hint ?? null} />
-          <BoardView
-            state={state}
-            catalog={catalog}
-            selected={selected}
-            burstAt={burstAt}
-            burstBonus={burstBonus}
-            reclaimMode={vaultIndex !== null}
-            onSelect={handleBoardSelect}
-            onDrop={drop}
-            onMerge={mergeAt}
+          <CityBrief
+            brief={brief}
+            selectedHint={preview?.hint ?? coach?.label ?? null}
           />
+          <Neighborhood venues={venues} focusId={brief.venueId}>
+            <BoardView
+              state={state}
+              catalog={catalog}
+              selected={selected}
+              burstAt={burstAt}
+              burstBonus={burstBonus}
+              reclaimMode={vaultIndex !== null}
+              onSelect={handleBoardSelect}
+              onDrop={drop}
+              onMerge={mergeAt}
+            />
+          </Neighborhood>
           <div className="apron">
             <GeneratorDock
               state={state}
@@ -170,6 +178,11 @@ export function App() {
         <DiscoveryModal
           itemId={discoveryId}
           catalog={catalog}
+          venueLine={
+            openedVenue
+              ? `${openedVenue.name} just lit up on the block.`
+              : null
+          }
           onDismiss={() => setDiscoveryId(null)}
         />
       ) : null}
