@@ -7,11 +7,7 @@ interface CoachBannerProps {
 
 export function CoachBanner({ hint, preview }: CoachBannerProps) {
   return (
-    <p
-      className={`coach coach-${hint.tone}`}
-      role="status"
-      aria-live="polite"
-    >
+    <p className={`whisper whisper-${hint.tone}`} role="status" aria-live="polite">
       {preview ?? hint.label}
     </p>
   );

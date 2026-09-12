@@ -65,7 +65,7 @@ export function BoardView({
   const moveGhost = (x: number, y: number) => {
     const ghost = ghostRef.current;
     if (!ghost) return;
-    ghost.style.transform = `translate(${x - 36}px, ${y - 36}px)`;
+    ghost.style.transform = `translate(${x - 40}px, ${y - 48}px)`;
   };
 
   const handleTap = (coord: Coord) => {
@@ -143,11 +143,21 @@ export function BoardView({
     : undefined;
 
   return (
-    <div className="board-frame">
+    <div className="plot">
+      <p className="terrace-plaque" aria-hidden="true">
+        The Terrace
+      </p>
+      <div className="terrace-rail" aria-hidden="true" />
+      <div className="terrace-rim" aria-hidden="true" />
+      <div className="terrace-vein" aria-hidden="true" />
+      <span className="corner-bloom nw" aria-hidden="true" />
+      <span className="corner-bloom ne" aria-hidden="true" />
+      <span className="corner-bloom sw" aria-hidden="true" />
+      <span className="corner-bloom se" aria-hidden="true" />
       <div
-        className="board"
+        className="sockets"
         role="grid"
-        aria-label="Merge board"
+        aria-label="Merge field"
         style={{
           gridTemplateColumns: `repeat(${state.board.width}, minmax(0, 1fr))`,
         }}
@@ -170,9 +180,7 @@ export function BoardView({
               (reclaimMode && count === 0) ||
               drop === "move" ||
               drop === "stack";
-            const invalid = Boolean(
-              dragging && drop === "invalid" && !isDragging,
-            );
+            const invalid = Boolean(dragging && drop === "invalid" && !isDragging);
             const preview = item
               ? previewStack(
                   item.id,
@@ -189,8 +197,8 @@ export function BoardView({
                 }${isSelected ? ", selected" : ""}${
                   preview?.canMerge ? `, ${preview.hint}` : ""
                 }`
-              : `Empty cell row ${rowIndex + 1}, column ${colIndex + 1}${
-                  selected ? ", valid move destination" : ""
+              : `Empty socket row ${rowIndex + 1}, column ${colIndex + 1}${
+                  selected ? ", can move here" : ""
                 }`;
 
             return (
@@ -201,7 +209,7 @@ export function BoardView({
                 data-row={rowIndex}
                 data-col={colIndex}
                 className={[
-                  "cell",
+                  "socket",
                   item ? "filled" : "empty",
                   isSelected ? "selected" : "",
                   isDragging ? "dragging" : "",
@@ -251,6 +259,7 @@ export function BoardView({
           }),
         )}
       </div>
+      <div className="terrace-steps" aria-hidden="true" />
       {dragging && dragItem ? (
         <div ref={ghostRef} className="drag-ghost" aria-hidden="true">
           <ItemTile item={dragItem} count={getCell(state.board, dragging)?.items.length ?? 1} />

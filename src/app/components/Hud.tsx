@@ -17,20 +17,11 @@ export function Hud({ state, catalog, onOpenCollection }: HudProps) {
   const energy = state.economy.energy;
 
   return (
-    <header className="hud">
-      <div className="hud-row">
-        <div className="hud-brand">
-          <p className="eyebrow">Phase 1 · Merge feel</p>
-          <h1>Glitter Merge</h1>
-          <p className="area">{area?.name ?? "Glitter City"}</p>
-        </div>
-        <button
-          type="button"
-          className="btn collection-btn"
-          onClick={onOpenCollection}
-        >
-          Looks {discovered}/{total}
-        </button>
+    <header className="float-hud">
+      <div className="title-lockup">
+        <p className="eyebrow">Glitter City</p>
+        <h1>Glitter Merge</h1>
+        <p className="area">{area?.name ?? "Glitter City"}</p>
       </div>
       <ul className="wallet" aria-label="Currencies">
         <li>
@@ -53,13 +44,11 @@ export function Hud({ state, catalog, onOpenCollection }: HudProps) {
           </span>
           <span className="wallet-value">{formatEnergy(energy.current, energy.max)}</span>
           <span className="wallet-label">Energy</span>
-          <span
-            className="energy-meter"
-            aria-hidden="true"
-            style={{ width: `${Math.min(100, (energy.current / energy.max) * 100)}%` }}
-          />
         </li>
       </ul>
+      <button type="button" className="looks-btn" onClick={onOpenCollection}>
+        Looks {discovered}/{total}
+      </button>
     </header>
   );
 }

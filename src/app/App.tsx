@@ -18,6 +18,7 @@ import { GeneratorDock } from "./components/GeneratorDock";
 import { Hud } from "./components/Hud";
 import { InventoryTray } from "./components/InventoryTray";
 import { useGame } from "./hooks/useGame";
+import { Environment } from "./world/Environment";
 
 export function App() {
   const { state, catalog, clock, events, selected, setSelected, dispatch, reset } =
@@ -66,7 +67,7 @@ export function App() {
     ? mergeCoach(selectedCount, Boolean(catalog.nextTier(selectedItem.id)))
     : {
         tone: "idle" as const,
-        label: "Stack 3 of a look to merge. Stack 5 for extra glam.",
+        label: "Stack 3 matching jewels. Keep 5 for a bonus.",
       };
 
   const drop = (from: Coord, to: Coord) => {
@@ -109,60 +110,62 @@ export function App() {
     setSelected(coord);
   };
 
-  if (view === "collection") {
-    return (
-      <div className="shell">
-        <div className="rainbow" aria-hidden="true" />
+  return (
+    <div className="stage">
+      <Environment />
+      <div className="stage-ui">
+        <Hud state={state} catalog={catalog} onOpenCollection={() => setView("collection")} />
+        <div className="grounds">
+          <CoachBanner hint={coach} preview={preview?.hint ?? null} />
+          <BoardView
+            state={state}
+            catalog={catalog}
+            selected={selected}
+            burstAt={burstAt}
+            burstBonus={burstBonus}
+            reclaimMode={vaultIndex !== null}
+            onSelect={handleBoardSelect}
+            onDrop={drop}
+            onMerge={mergeAt}
+          />
+          <div className="apron">
+            <GeneratorDock
+              state={state}
+              catalog={catalog}
+              now={clock.now()}
+              onCollect={() =>
+                dispatch({
+                  type: "COLLECT_GENERATOR",
+                  generatorId: "vanity_case",
+                  to: null,
+                })
+              }
+            />
+            <InventoryTray
+              state={state}
+              catalog={catalog}
+              selectedIndex={vaultIndex}
+              onSelect={setVaultIndex}
+              onReclaim={(index, to) =>
+                dispatch({ type: "RECLAIM", inventoryIndex: index, to })
+              }
+            />
+          </div>
+        </div>
+        <div className="stage-foot">
+          <FeedbackBar events={events} />
+          <button type="button" className="text-btn" onClick={reset}>
+            New Game
+          </button>
+        </div>
+      </div>
+      {view === "collection" ? (
         <CollectionScreen
           state={state}
           catalog={catalog}
           onClose={() => setView("board")}
         />
-      </div>
-    );
-  }
-
-  return (
-    <div className="shell">
-      <div className="rainbow" aria-hidden="true" />
-      <Hud state={state} catalog={catalog} onOpenCollection={() => setView("collection")} />
-      <CoachBanner hint={coach} preview={preview?.hint ?? null} />
-      <BoardView
-        state={state}
-        catalog={catalog}
-        selected={selected}
-        burstAt={burstAt}
-        burstBonus={burstBonus}
-        reclaimMode={vaultIndex !== null}
-        onSelect={handleBoardSelect}
-        onDrop={drop}
-        onMerge={mergeAt}
-      />
-      <GeneratorDock
-        state={state}
-        catalog={catalog}
-        now={clock.now()}
-        onCollect={() =>
-          dispatch({
-            type: "COLLECT_GENERATOR",
-            generatorId: "vanity_case",
-            to: null,
-          })
-        }
-      />
-      <InventoryTray
-        state={state}
-        catalog={catalog}
-        selectedIndex={vaultIndex}
-        onSelect={setVaultIndex}
-        onReclaim={(index, to) => dispatch({ type: "RECLAIM", inventoryIndex: index, to })}
-      />
-      <FeedbackBar events={events} />
-      <footer className="footer">
-        <button type="button" className="btn ghost" onClick={reset}>
-          New Game
-        </button>
-      </footer>
+      ) : null}
       {discoveryId ? (
         <DiscoveryModal
           itemId={discoveryId}

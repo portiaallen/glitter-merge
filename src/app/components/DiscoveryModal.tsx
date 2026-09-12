@@ -16,11 +16,11 @@ export function DiscoveryModal({ itemId, catalog, onDismiss }: DiscoveryModalPro
   const family = catalog.getFamily(item.familyId);
 
   return (
-    <div className="modal-scrim" role="dialog" aria-modal="true" aria-labelledby="discovery-title">
-      <button type="button" className="discovery-card" onClick={onDismiss}>
+    <div className="overlay-scrim discovery" role="dialog" aria-modal="true" aria-labelledby="discovery-title">
+      <button type="button" className="discovery-jewel" onClick={onDismiss}>
         <p className="eyebrow">New discovery</p>
-        <h2 id="discovery-title">You created a new look</h2>
-        <div className="discovery-tile">
+        <h2 id="discovery-title">A new look sparkles to life</h2>
+        <div className="discovery-stage">
           <ItemTile item={item} size="hero" />
         </div>
         <p className="discovery-name" style={{ color: theme.accent }}>
