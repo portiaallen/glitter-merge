@@ -16,6 +16,8 @@ src/
     state/              GameState + reducer
     persistence/        Serialize, migrate, adapters
   app/                  React shell. Imports game, never the reverse.
+    destination/        City brief + venue lighting (presentation only)
+    world/              Decorative neighborhood / atmosphere
 ```
 
 ## Stack

@@ -8,9 +8,37 @@ Glitter Merge is a mobile-first merge game and luxury LGBTQ+ world-building expe
 
 **Player fantasy:** Build the most fabulous LGBTQ+ luxury destination imaginable.
 
-Fairyland Merge is a muse for merge-game progression and retention architecture only. Glitter Merge has its own original identity, names, items, world, and visual language.
+Fairyland Merge is the **structural muse** — the kind of merge game Glitter Merge is. It is not the skin, story, or brand.
+
+We take from that genre:
+
+- You merge **inside a living destination**, not on a spreadsheet
+- **3** identical items become **1** upgrade; **5** become **2**
+- Energy paces harvest, not the joy of merging
+- Quests give the next merge a reason
+- The world comes alive as you discover looks
+- Long-term joy is building and expanding a place that feels like yours
+- Calm session length, no high score, no rush
+
+We never take:
+
+- Fairies, dragons, unicorns, elves, mist, medieval kingdoms
+- Enchanted forests, fantasy prophecy, or their characters
+- Their art, UI chrome, names, or marketing
+- A dark, muddy, or generic-fantasy look
 
 This is **not** a fantasy/fairy game with LGBTQ+ characters. There are no fairies, enchanted forests, medieval kingdoms, mystical prophecy, generic fantasy villages, or dark-fantasy aesthetics.
+
+Glitter's translation of that structure:
+
+| Fairyland-style structure | Glitter City |
+| --- | --- |
+| Merge island | Glitter Neighborhood terrace |
+| Fog / locked land | Velvet-rope lots and unopened districts |
+| Quests | City brief ("Tonight") |
+| Fairy homes / buildings | Venues that light up from discoveries |
+| Creatures and flowers | Luxury looks — beauty, fashion, jewels, nightlife |
+| Expand the kingdom | Build the most fabulous LGBTQ+ destination |
 
 The fantasy is luxury, wealth, fashion, nightlife, real estate, entertainment, beauty, travel, friendship, celebration, and fabulous LGBTQ+ culture.
 

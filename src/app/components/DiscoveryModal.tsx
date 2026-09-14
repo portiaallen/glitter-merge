@@ -6,10 +6,16 @@ import { themeFor } from "../presentation";
 interface DiscoveryModalProps {
   itemId: ItemId;
   catalog: ItemCatalog;
+  venueLine?: string | null;
   onDismiss: () => void;
 }
 
-export function DiscoveryModal({ itemId, catalog, onDismiss }: DiscoveryModalProps) {
+export function DiscoveryModal({
+  itemId,
+  catalog,
+  venueLine,
+  onDismiss,
+}: DiscoveryModalProps) {
   const item = catalog.getItem(itemId);
   if (!item) return null;
   const theme = themeFor(item);
@@ -29,6 +35,7 @@ export function DiscoveryModal({ itemId, catalog, onDismiss }: DiscoveryModalPro
         <p className="discovery-meta">
           Tier {item.tier} · {family?.name ?? theme.label}
         </p>
+        {venueLine ? <p className="discovery-venue">{venueLine}</p> : null}
         <p className="discovery-hint">Tap to keep merging</p>
       </button>
     </div>
