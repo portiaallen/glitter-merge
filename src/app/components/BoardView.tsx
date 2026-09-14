@@ -158,6 +158,8 @@ export function BoardView({
         className="sockets"
         role="grid"
         aria-label="Merge field"
+        aria-rowcount={state.board.height}
+        aria-colcount={state.board.width}
         style={{
           gridTemplateColumns: `repeat(${state.board.width}, minmax(0, 1fr))`,
         }}
@@ -208,6 +210,8 @@ export function BoardView({
                 tabIndex={0}
                 data-row={rowIndex}
                 data-col={colIndex}
+                aria-rowindex={rowIndex + 1}
+                aria-colindex={colIndex + 1}
                 className={[
                   "socket",
                   item ? "filled" : "empty",
