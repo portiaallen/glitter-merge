@@ -1,26 +1,20 @@
 # Glitter Merge — Build Roadmap
 
-## Phase 0 — Foundation (this work)
+## Phase 0 — Foundation
 
-- Inspect empty repository and choose a web TypeScript stack
-- Game-state, item, board, economy, and timer models
-- Data-driven catalog for six starter families
-- Deterministic merge planner (3 / 5 / N)
-- Persistence interfaces + localStorage adapter
-- Documentation
-- Minimal playable board shell to prove the architecture
+Complete. Architecture, data models, persistence, and a playable board shell.
 
-## Phase 1 — Merge feel (recommended next)
+## Phase 1 — Merge feel (this work)
 
-- Tune board size, starter layout, and generator pacing
-- Stronger drag ghost / drop highlights
-- Merge juice (short, original motion — not copied from other games)
-- Clearer 3-vs-5 teaching
-- Inventory reclaim onto empty tiles
-- Collection screen: discovered / undiscovered / family progress
-- Energy spend on selected actions
+- Board prominence, ItemTile presentation, clearer occupied/empty/selected states
+- Drag ghost with valid/invalid destinations; tap-to-select matching destinations
+- Contextual 3-vs-5 coaching (`3 to merge` / `✨ 5 MERGE BONUS!`)
+- Merge juice, discovery moments, reusable feedback bar
+- Inventory reclaim onto empty tiles only
+- Collection screen with locked undiscovered tiers
+- Energy spend on Vanity Case collect only (1 Energy, regenerates)
 
-## Phase 2 — City start
+## Phase 2 — City start (recommended next)
 
 - Glitter Neighborhood map with a handful of plots
 - Spend merged resources / Glitter Cash to develop one or two businesses

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   browserStorage,
   createInitialState,
@@ -27,21 +27,30 @@ export function useGame() {
   });
   const [events, setEvents] = useState<readonly GameEvent[]>([]);
   const [selected, setSelected] = useState<Coord | null>(null);
+  const stateRef = useRef(state);
+  stateRef.current = state;
 
   const dispatch = useCallback(
     (action: GameAction) => {
-      const result = reduce(state, action, { catalog, clock });
+      const result = reduce(stateRef.current, action, { catalog, clock });
+      stateRef.current = result.state;
       setState(result.state);
       persistence.save(result.state);
-      setEvents(result.events);
+      if (action.type !== "TICK") {
+        setEvents(result.events);
+      }
       return result;
     },
-    [catalog, clock, persistence, state],
+    [catalog, clock, persistence],
   );
 
   useEffect(() => {
     const id = window.setInterval(() => {
-      setState((current) => reduce(current, { type: "TICK" }, { catalog, clock }).state);
+      const current = stateRef.current;
+      const result = reduce(current, { type: "TICK" }, { catalog, clock });
+      if (result.state === current) return;
+      stateRef.current = result.state;
+      setState(result.state);
     }, TICK_MS);
     return () => window.clearInterval(id);
   }, [catalog, clock]);
@@ -49,6 +58,7 @@ export function useGame() {
   const reset = useCallback(() => {
     persistence.clear();
     const next = createInitialState(catalog, clock);
+    stateRef.current = next;
     setState(next);
     setSelected(null);
     setEvents([{ kind: "reset", message: "A fresh Glitter City corner." }]);
