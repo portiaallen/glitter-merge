@@ -24,6 +24,11 @@ export function Environment() {
         <span className="hill hill-b" />
         <span className="hill hill-c" />
       </div>
+      <div className="distant-grove">
+        {Array.from({ length: 7 }, (_, index) => (
+          <span key={index} className={`grove-tree grove-tree-${index}`} />
+        ))}
+      </div>
       <div className="palms">
         <span className="palm palm-left" />
         <span className="palm palm-right" />
@@ -33,6 +38,11 @@ export function Environment() {
         <span className="bloom bloom-b" />
         <span className="bloom bloom-c" />
         <span className="bloom bloom-d" />
+      </div>
+      <div className="foreground-garden">
+        {Array.from({ length: 12 }, (_, index) => (
+          <span key={index} className={`garden-spark garden-spark-${index}`} />
+        ))}
       </div>
       <div className="lanterns">
         <span className="lantern lantern-a" />

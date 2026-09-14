@@ -189,6 +189,48 @@ button:focus-visible,
   background: #ff8ec8;
 }
 
+.distant-grove {
+  position: absolute;
+  left: -4%;
+  right: -4%;
+  bottom: 27%;
+  height: 24%;
+  opacity: 0.9;
+}
+
+.grove-tree {
+  position: absolute;
+  bottom: 0;
+  width: 13%;
+  height: 70%;
+  border-radius: 50% 50% 18% 18%;
+  background:
+    radial-gradient(circle at 30% 25%, #fff7c7 0 5%, transparent 6%),
+    radial-gradient(circle at 55% 35%, #ff82c7 0 28%, transparent 29%),
+    radial-gradient(circle at 25% 55%, #c842bb 0 32%, transparent 33%),
+    linear-gradient(90deg, #8a3c98 0 34%, #c36db4 35% 62%, #7d358c 63%);
+  box-shadow: 0 14px 22px rgba(87, 30, 95, 0.25);
+}
+
+.grove-tree::after {
+  content: "";
+  position: absolute;
+  left: 46%;
+  bottom: -22%;
+  width: 9%;
+  height: 32%;
+  border-radius: 999px;
+  background: #a86d4a;
+}
+
+.grove-tree-0 { left: 2%; height: 64%; }
+.grove-tree-1 { left: 16%; height: 88%; }
+.grove-tree-2 { left: 31%; height: 72%; }
+.grove-tree-3 { left: 46%; height: 96%; }
+.grove-tree-4 { left: 61%; height: 76%; }
+.grove-tree-5 { left: 76%; height: 88%; }
+.grove-tree-6 { left: 90%; height: 64%; }
+
 .sun-jewel {
   position: absolute;
   top: 6%;
@@ -281,6 +323,42 @@ button:focus-visible,
   inset: auto 0 0;
   height: 12%;
 }
+
+.foreground-garden {
+  position: absolute;
+  left: -2%;
+  right: -2%;
+  bottom: 0;
+  height: 18%;
+  z-index: 2;
+  pointer-events: none;
+  background:
+    linear-gradient(165deg, transparent 0 26%, rgba(35, 157, 111, 0.72) 27% 34%, transparent 35%),
+    linear-gradient(15deg, transparent 0 54%, rgba(35, 157, 111, 0.65) 55% 62%, transparent 63%);
+}
+
+.garden-spark {
+  position: absolute;
+  bottom: 8%;
+  width: 24px;
+  height: 18px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 35%, #fff 0 12%, #ffd85d 13% 28%, #ff5ea8 29% 58%, transparent 60%);
+  filter: drop-shadow(0 3px 4px rgba(75, 22, 64, 0.25));
+}
+
+.garden-spark-0 { left: 4%; }
+.garden-spark-1 { left: 12%; bottom: 28%; transform: scale(1.3); }
+.garden-spark-2 { left: 22%; }
+.garden-spark-3 { left: 34%; bottom: 20%; transform: scale(0.8); }
+.garden-spark-4 { left: 47%; }
+.garden-spark-5 { left: 58%; bottom: 30%; transform: scale(1.2); }
+.garden-spark-6 { left: 68%; }
+.garden-spark-7 { left: 77%; bottom: 24%; transform: scale(0.8); }
+.garden-spark-8 { left: 86%; }
+.garden-spark-9 { left: 94%; bottom: 30%; }
+.garden-spark-10 { left: 28%; bottom: 45%; transform: scale(0.7); }
+.garden-spark-11 { left: 72%; bottom: 48%; transform: scale(0.7); }
 
 .bloom {
   position: absolute;
@@ -724,9 +802,9 @@ h2 {
   z-index: 1;
 }
 
-.fairy-banner {
+.world-sign {
   position: absolute;
-  top: 10px;
+  top: 14px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 8;
@@ -734,28 +812,28 @@ h2 {
   flex-direction: column;
   align-items: center;
   gap: 2px;
-  min-width: min(70%, 360px);
-  padding: 8px 20px 10px;
-  border-radius: 999px;
-  background: linear-gradient(180deg, #fff7d6, #ffb1d2 28%, #ff79b8 100%);
-  border: 3px solid rgba(255, 255, 255, 0.8);
-  box-shadow: 0 10px 18px rgba(129, 24, 96, 0.2), inset 0 2px 0 rgba(255, 255, 255, 0.8);
+  min-width: min(76%, 390px);
+  padding: 7px 22px 9px;
+  border-radius: 18px 18px 28px 28px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(255, 221, 239, 0.92) 25%, rgba(213, 97, 178, 0.94) 100%);
+  border: 3px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 12px 0 rgba(109, 45, 122, 0.18), 0 18px 24px rgba(129, 24, 96, 0.22), inset 0 2px 0 #fff;
   pointer-events: none;
 }
 
-.fairy-banner span {
+.world-sign span {
   font-family: "Arial Black", Impact, sans-serif;
-  font-size: clamp(26px, 5vw, 40px);
+  font-size: clamp(20px, 4.5vw, 34px);
   line-height: 0.9;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
   color: #fff;
-  text-shadow: 0 3px 0 #ff4d8d, 0 8px 16px rgba(94, 18, 65, 0.28);
+  text-shadow: 0 3px 0 #9c3dba, 0 7px 12px rgba(94, 18, 65, 0.28);
 }
 
-.fairy-banner small {
+.world-sign small {
   font-size: 11px;
   letter-spacing: 0.18em;
-  color: #fff9d8;
+  color: #fff9fb;
   font-weight: 800;
 }
 
@@ -802,6 +880,34 @@ h2 {
 .corner-bloom.ne { top: 10px; right: 10px; }
 .corner-bloom.sw { bottom: 10px; left: 10px; background: radial-gradient(circle at 35% 35%, #fff, #ffe566 55%, #d4a84a); }
 .corner-bloom.se { bottom: 10px; right: 10px; background: radial-gradient(circle at 35% 35%, #fff, #8b6cff 55%, #4527a0); }
+
+.garden-edge {
+  position: absolute;
+  top: 31%;
+  bottom: 9%;
+  width: 12%;
+  z-index: 6;
+  pointer-events: none;
+  opacity: 0.95;
+  background:
+    radial-gradient(circle at 50% 8%, #fff8bc 0 5px, #ff62ab 6px 12px, transparent 13px),
+    radial-gradient(circle at 35% 30%, #fff 0 4px, #9c74ff 5px 11px, transparent 12px),
+    radial-gradient(circle at 68% 50%, #fff8bc 0 4px, #35d9c0 5px 12px, transparent 13px),
+    radial-gradient(circle at 42% 76%, #fff 0 4px, #ff7aaf 5px 12px, transparent 13px);
+  filter: drop-shadow(0 8px 8px rgba(54, 28, 74, 0.2));
+}
+
+.garden-edge::after {
+  content: "";
+  position: absolute;
+  inset: 0 45%;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #70c86b, #288d70);
+  z-index: -1;
+}
+
+.garden-edge-left { left: 0; }
+.garden-edge-right { right: 0; transform: scaleX(-1); }
 
 .terrace-rim {
   position: absolute;
@@ -1038,6 +1144,31 @@ h2 {
   transform: translateY(0) rotateX(14deg) rotateZ(-2deg);
 }
 
+.jewel-body::before,
+.jewel-body::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+
+.jewel-body::before {
+  inset: 9% 16% auto;
+  height: 26%;
+  border-radius: 50%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.78), transparent);
+  transform: rotate(-12deg);
+}
+
+.jewel-body::after {
+  right: 12%;
+  bottom: 14%;
+  width: 18%;
+  height: 18%;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.46);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
 .jewel.tier-2 .jewel-body {
   box-shadow:
     0 18px 26px var(--jewel-glow, rgba(255, 77, 141, 0.52)),
@@ -1087,6 +1218,32 @@ h2 {
 .jewel[data-family="automobiles"] .jewel-body {
   border-radius: 34% 34% 48% 48%;
   transform: translateY(0) rotateX(14deg) rotateZ(2deg);
+}
+
+.jewel[data-family="beauty"] .jewel-body::after {
+  width: 30%;
+  height: 12%;
+  border-radius: 999px;
+  right: 35%;
+  bottom: 16%;
+  background: rgba(255, 246, 255, 0.58);
+}
+
+.jewel[data-family="jewelry"] .jewel-body::before {
+  inset: 16% 28% auto;
+  height: 42%;
+  transform: rotate(45deg);
+  border-radius: 18% 50% 18% 50%;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 235, 126, 0.18));
+}
+
+.jewel[data-family="real_estate"] .jewel-body::after {
+  width: 34%;
+  height: 28%;
+  border-radius: 12% 12% 4% 4%;
+  right: 33%;
+  bottom: 12%;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.16));
 }
 
 .jewel-facet {
@@ -1633,5 +1790,97 @@ h2 {
     right: 22%;
     width: 96px;
     height: 96px;
+  }
+}
+
+/* World-first composition: the play garden owns the viewport and the HUD floats above it. */
+.stage-ui {
+  width: min(720px, 100%);
+  padding-left: 10px;
+  padding-right: 10px;
+  gap: 6px;
+}
+
+.float-hud {
+  padding: 2px 4px;
+  filter: drop-shadow(0 8px 10px rgba(77, 28, 76, 0.12));
+}
+
+.wallet li {
+  padding: 5px 4px;
+  background: rgba(255, 255, 255, 0.58);
+  border-color: rgba(255, 255, 255, 0.62);
+}
+
+.city-block {
+  position: relative;
+}
+
+.frontage {
+  position: relative;
+  z-index: 5;
+  margin: 0 8% -22px;
+  padding: 0 10px;
+  filter: drop-shadow(0 8px 8px rgba(76, 28, 76, 0.16));
+}
+
+.venue-build {
+  height: 34px;
+}
+
+.venue-label {
+  color: #fff;
+  text-shadow: 0 1px 3px #5d2a70;
+}
+
+.plaza-lot {
+  position: relative;
+  z-index: 3;
+}
+
+.plot {
+  min-height: clamp(470px, 67dvh, 760px);
+  border: 0;
+  box-shadow: 0 42px 58px rgba(46, 21, 72, 0.26);
+}
+
+.apron {
+  position: relative;
+  z-index: 8;
+  margin: -18px 5% 0;
+  border-radius: 30px;
+  background: rgba(255, 249, 244, 0.76);
+  box-shadow: 0 14px 22px rgba(72, 24, 57, 0.2), inset 0 1px 0 #fff;
+}
+
+.stage-foot {
+  padding: 0 8px;
+}
+
+@media (max-width: 520px) {
+  .stage-ui {
+    padding-top: max(6px, env(safe-area-inset-top));
+  }
+
+  .plot {
+    min-height: clamp(460px, 68dvh, 620px);
+  }
+
+  .frontage {
+    margin-left: 4%;
+    margin-right: 4%;
+  }
+
+  .garden-edge {
+    width: 15%;
+  }
+
+  .distant-grove,
+  .skyline {
+    opacity: 0.55;
+  }
+
+  .foreground-garden {
+    height: 14%;
   }
 }
