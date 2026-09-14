@@ -160,9 +160,10 @@ export function BoardView({
 
   return (
     <div className="plot">
-      <p className="terrace-plaque" aria-hidden="true">
-        The Terrace
-      </p>
+      <div className="fairy-banner" aria-hidden="true">
+        <span>FAIRYLAND</span>
+        <small>MERGE &amp; MAGIC</small>
+      </div>
       <div className="terrace-rail" aria-hidden="true" />
       <div className="terrace-rim" aria-hidden="true" />
       <div className="terrace-vein" aria-hidden="true" />
@@ -172,6 +173,8 @@ export function BoardView({
       <span className="corner-bloom se" aria-hidden="true" />
       <div className="play-surface">
         <div className="surface-ribbon" aria-hidden="true" />
+        <div className="surface-pond" aria-hidden="true" />
+        <div className="surface-flowers" aria-hidden="true" />
         <div
           className="sockets"
           role="grid"
