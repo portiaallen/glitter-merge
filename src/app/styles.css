@@ -1,11 +1,33 @@
 :root {
   color-scheme: light;
-  --ink: #3b1840;
-  --ink-soft: #5c2a55;
-  --cream: #fff4e8;
-  --gold: #e8c36a;
-  --rose: #ff4d8d;
-  --violet: #8b6cff;
+  --ink: #351438;
+  --ink-soft: #633253;
+  --cream: #fff7ed;
+  --iridescent: #fffdf9;
+  --pink: #ff4d9a;
+  --coral: #ff6b61;
+  --fuchsia: #d948d8;
+  --lavender: #9b86ff;
+  --cobalt: #4778e8;
+  --turquoise: #31cdb8;
+  --emerald: #31ad87;
+  --gold: #edc765;
+  --rose: var(--pink);
+  --violet: var(--lavender);
+  --surface-glass: rgba(255, 253, 249, 0.78);
+  --surface-lacquer: #fff1eb;
+  --surface-deep: #f2c4c8;
+  --line-soft: rgba(255, 255, 255, 0.78);
+  --line-gold: rgba(237, 199, 101, 0.72);
+  --shadow-soft: 0 10px 22px rgba(72, 24, 57, 0.14);
+  --shadow-deep: 0 24px 42px rgba(72, 24, 57, 0.25);
+  --focus-ring: #174fba;
+  --radius-panel: 24px;
+  --radius-board: 34px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
   font-family: Outfit, "Trebuchet MS", sans-serif;
   color: var(--ink);
 }
@@ -28,6 +50,12 @@ body {
 
 button {
   font: inherit;
+}
+
+button:focus-visible,
+[tabindex="0"]:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 3px;
 }
 
 .sr-only {
@@ -428,9 +456,10 @@ h2 {
   flex-direction: column;
   align-items: center;
   padding: 7px 4px;
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.62);
-  box-shadow: inset 0 1px 0 #fff, 0 6px 14px rgba(80, 20, 50, 0.1);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-panel);
+  background: var(--surface-glass);
+  box-shadow: inset 0 1px 0 #fff, var(--shadow-soft);
 }
 
 .wallet-icon {
@@ -648,16 +677,50 @@ h2 {
 .plot {
   position: relative;
   flex: 1;
-  min-height: 0;
-  padding: 28px 12px 22px;
-  border-radius: 36px 36px 22px 22px;
+  min-height: clamp(390px, 56dvh, 620px);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  border-radius: 32px;
   background:
-    radial-gradient(circle at 20% 15%, rgba(255, 255, 255, 0.7), transparent 28%),
-    linear-gradient(180deg, #fff3e2 0%, #f3d0c0 46%, #e8b7b0 100%);
+    radial-gradient(ellipse at 18% 18%, rgba(255, 255, 255, 0.82) 0 7%, transparent 18%),
+    radial-gradient(ellipse at 86% 70%, rgba(102, 211, 190, 0.72) 0 8%, transparent 18%),
+    linear-gradient(145deg, #baf0d3 0%, #7fd5bd 32%, #f6d3ce 72%, #f3b5c9 100%);
   box-shadow:
-    0 22px 40px rgba(90, 30, 40, 0.28),
+    0 24px 44px rgba(72, 24, 57, 0.22),
     inset 0 1px 0 #fff,
-    inset 0 -18px 30px rgba(140, 60, 50, 0.12);
+    inset 0 -24px 34px rgba(46, 125, 102, 0.14),
+    inset 0 0 0 5px rgba(237, 199, 101, 0.14);
+}
+
+.plot::before {
+  content: "";
+  position: absolute;
+  inset: 16% 10% 8%;
+  border-radius: 42% 48% 38% 52%;
+  background:
+    radial-gradient(circle at 10% 25%, rgba(255, 255, 255, 0.72) 0 5px, transparent 6px),
+    radial-gradient(circle at 85% 24%, rgba(255, 255, 255, 0.62) 0 4px, transparent 5px),
+    radial-gradient(circle at 76% 78%, rgba(255, 240, 167, 0.8) 0 5px, transparent 6px),
+    linear-gradient(115deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.02) 44%, rgba(255, 255, 255, 0.18));
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.3), 0 12px 26px rgba(42, 116, 93, 0.16);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.plot::after {
+  content: "";
+  position: absolute;
+  right: -7%;
+  bottom: 6%;
+  width: 30%;
+  height: 18%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at 35% 35%, rgba(255, 255, 255, 0.72), transparent 22%),
+    linear-gradient(145deg, rgba(112, 221, 232, 0.9), rgba(91, 137, 224, 0.72));
+  box-shadow: inset 0 3px 0 rgba(255, 255, 255, 0.55), 0 12px 20px rgba(47, 100, 137, 0.18);
+  transform: rotate(-12deg);
+  pointer-events: none;
+  z-index: 1;
 }
 
 .terrace-plaque {
@@ -673,8 +736,8 @@ h2 {
   font-size: 22px;
   line-height: 1.1;
   color: #6a2048;
-  background: rgba(255, 248, 230, 0.88);
-  box-shadow: 0 4px 10px rgba(80, 20, 50, 0.12);
+  background: rgba(255, 248, 230, 0.7);
+  box-shadow: 0 4px 10px rgba(80, 20, 50, 0.1);
   pointer-events: none;
 }
 
@@ -725,8 +788,9 @@ h2 {
 .terrace-rim {
   position: absolute;
   inset: 8px;
-  border-radius: 30px;
-  border: 2px solid rgba(232, 195, 106, 0.55);
+  border-radius: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.38);
+  box-shadow: inset 0 0 0 1px rgba(237, 199, 101, 0.32);
   pointer-events: none;
 }
 
@@ -739,25 +803,35 @@ h2 {
 }
 
 .sockets {
-  position: relative;
-  display: grid;
-  gap: 6px;
-  height: 100%;
+  position: absolute;
+  inset: 0;
+  display: block;
   touch-action: none;
+  z-index: 4;
 }
 
 .socket {
   position: relative;
-  min-height: clamp(48px, 10dvh, 72px);
+  min-height: 0;
   display: flex;
   align-items: end;
   justify-content: center;
   cursor: pointer;
   user-select: none;
+  border-radius: 18px;
+  transition: transform 0.18s ease, filter 0.18s ease;
 }
 
 .socket.selected .jewel-body {
   transform: translateY(-6px) scale(1.06);
+}
+
+.socket.selected {
+  filter: drop-shadow(0 8px 10px rgba(53, 20, 56, 0.16));
+}
+
+.socket.selected .socket-well {
+  box-shadow: 0 0 0 3px var(--cobalt), 0 0 18px rgba(71, 120, 232, 0.36), inset 0 6px 10px rgba(0, 0, 0, 0.18);
 }
 
 .socket.dragging .jewel-body {
@@ -765,11 +839,11 @@ h2 {
 }
 
 .socket.valid-target .socket-well {
-  box-shadow: 0 0 0 3px #0f9f8a, inset 0 6px 10px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 0 0 3px var(--turquoise), 0 0 16px rgba(49, 205, 184, 0.42), inset 0 6px 10px rgba(0, 0, 0, 0.18);
 }
 
 .socket.invalid-target .socket-well {
-  box-shadow: 0 0 0 3px #b03a4a, inset 0 6px 10px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 0 0 3px var(--coral), inset 0 6px 10px rgba(0, 0, 0, 0.18);
 }
 
 .socket.drop-hover {
@@ -795,6 +869,10 @@ h2 {
   animation: sparkle 0.8s ease-out;
 }
 
+.socket.burst .jewel-body {
+  filter: brightness(1.08) saturate(1.12);
+}
+
 .jewel {
   width: 100%;
   height: 100%;
@@ -810,11 +888,15 @@ h2 {
   position: absolute;
   left: 12%;
   right: 12%;
-  bottom: 14%;
-  height: 28%;
+  bottom: 12%;
+  height: 22%;
   border-radius: 50%;
-  background: radial-gradient(circle at 50% 40%, #d7a8a0, #8d5b55);
-  box-shadow: inset 0 8px 10px rgba(0, 0, 0, 0.25), 0 1px 0 rgba(255, 255, 255, 0.4);
+  background: rgba(76, 77, 112, 0.28);
+  box-shadow: inset 0 5px 8px rgba(53, 20, 56, 0.18), 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.socket.empty .socket-well {
+  opacity: 0.22;
 }
 
 .jewel-shadow {
@@ -844,6 +926,21 @@ h2 {
   display: grid;
   place-items: center;
   transition: transform 0.18s ease, opacity 0.18s ease;
+}
+
+.jewel.tier-2 .jewel-body {
+  box-shadow:
+    0 10px 14px var(--jewel-glow, rgba(255, 77, 141, 0.4)),
+    inset 0 -8px 12px rgba(0, 0, 0, 0.16),
+    inset 0 6px 8px rgba(255, 255, 255, 0.42);
+}
+
+.jewel.tier-3 .jewel-body {
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.7),
+    0 12px 18px var(--jewel-glow, rgba(255, 77, 141, 0.45)),
+    inset 0 -8px 12px rgba(0, 0, 0, 0.18),
+    inset 0 6px 8px rgba(255, 255, 255, 0.48);
 }
 
 .jewel-facet {
@@ -943,6 +1040,22 @@ h2 {
     inset 0 -8px 12px rgba(0, 0, 0, 0.18);
 }
 
+.rarity-icon .jewel-body,
+.rarity-couture .jewel-body {
+  background:
+    radial-gradient(circle at 30% 25%, #fff 0 9%, transparent 18%),
+    linear-gradient(135deg, var(--jewel-wash, #ffe0ec), var(--jewel-accent, #ff4d8d) 56%, var(--jewel-deep, #c2185b));
+}
+
+.rarity-couture .jewel-body {
+  box-shadow:
+    0 0 0 2px var(--gold),
+    0 0 22px var(--jewel-glow, rgba(255, 77, 141, 0.5)),
+    0 14px 22px rgba(53, 20, 56, 0.24),
+    inset 0 -8px 12px rgba(0, 0, 0, 0.18),
+    inset 0 6px 8px rgba(255, 255, 255, 0.52);
+}
+
 .merge-chip {
   position: absolute;
   left: 4%;
@@ -997,7 +1110,8 @@ h2 {
   z-index: 40;
   pointer-events: none;
   transform: translate(-999px, -999px);
-  filter: drop-shadow(0 18px 16px rgba(42, 16, 48, 0.3));
+  filter: drop-shadow(0 22px 18px rgba(42, 16, 48, 0.34));
+  transform-origin: center center;
 }
 
 .apron {
@@ -1006,9 +1120,10 @@ h2 {
   justify-content: space-between;
   gap: 10px;
   padding: 8px 10px;
-  border-radius: 22px;
-  background: rgba(255, 248, 238, 0.7);
-  box-shadow: 0 10px 20px rgba(80, 20, 50, 0.12), inset 0 1px 0 #fff;
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-panel);
+  background: var(--surface-glass);
+  box-shadow: var(--shadow-soft), inset 0 1px 0 #fff;
 }
 
 .vanity-prop {
@@ -1077,8 +1192,9 @@ h2 {
 }
 
 .jewel-btn.ready {
-  background: linear-gradient(135deg, #ff4d8d, #8b6cff);
+  background: linear-gradient(135deg, var(--pink), var(--fuchsia) 52%, var(--lavender));
   color: #fff;
+  box-shadow: 0 8px 18px rgba(217, 72, 216, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.55);
 }
 
 .jewel-btn:disabled {

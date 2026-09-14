@@ -26,6 +26,20 @@ interface BoardViewProps {
 
 const DRAG_THRESHOLD = 10;
 
+function worldAnchor(row: number, col: number, width: number, height: number) {
+  const socketWidth = Math.min(18, 78 / width);
+  const socketHeight = Math.min(16, 78 / height);
+  const x = 15 + (width > 1 ? (col / (width - 1)) * 70 : 35) + (row % 2 === 1 ? 2 : 0);
+  const y = 13 + (height > 1 ? (row / (height - 1)) * 72 : 36);
+
+  return {
+    left: `${x - socketWidth / 2}%`,
+    top: `${y - socketHeight / 2}%`,
+    width: `${socketWidth}%`,
+    height: `${socketHeight}%`,
+  };
+}
+
 function coordFromPoint(clientX: number, clientY: number): Coord | null {
   const node = document.elementFromPoint(clientX, clientY);
   const cell = node?.closest("[data-row][data-col]");
@@ -160,9 +174,6 @@ export function BoardView({
         aria-label="Merge field"
         aria-rowcount={state.board.height}
         aria-colcount={state.board.width}
-        style={{
-          gridTemplateColumns: `repeat(${state.board.width}, minmax(0, 1fr))`,
-        }}
       >
         {state.board.cells.flatMap((row, rowIndex) =>
           row.map((cell, colIndex) => {
@@ -212,6 +223,12 @@ export function BoardView({
                 data-col={colIndex}
                 aria-rowindex={rowIndex + 1}
                 aria-colindex={colIndex + 1}
+                style={worldAnchor(
+                  rowIndex,
+                  colIndex,
+                  state.board.width,
+                  state.board.height,
+                )}
                 className={[
                   "socket",
                   item ? "filled" : "empty",
