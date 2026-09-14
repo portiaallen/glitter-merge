@@ -6,7 +6,11 @@ A mobile-first merge game and luxury LGBTQ+ world-building experience.
 
 > Build the most fabulous LGBTQ+ luxury destination imaginable.
 
-This repository is in **Phase 1**: a polished merge-feel prototype on the Phase 0 engine. It is inspired by the progression patterns of successful merge games, not by their characters, art, story, or UI.
+Glitter Merge is **our** version of a Fairyland-style merge destination: you merge on a living city block, discoveries dress the neighborhood, and the long game is building the most fabulous LGBTQ+ luxury destination imaginable.
+
+It takes that genre's structure (merge-in-world, 3-and-5, energy harvest, quests, a place that grows). It does **not** take fairies, fog-kingdoms, or anyone else's art.
+
+This repository is a playable destination prototype on the Phase 0 engine.
 
 ## Play the shell
 

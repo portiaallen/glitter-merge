@@ -36,25 +36,29 @@ export function ItemTile({
 }: ItemTileProps) {
   const theme = themeFor(item ?? undefined);
   const rarity = item ? rarityForTier(item.tier) : "common";
-  const showMerge = Boolean(onMerge) && mergeable && !locked;
+  const showMerge = Boolean(onMerge) && mergeable && selected && !locked;
+  const tier = item?.tier ?? lockedTier ?? 1;
 
   if (locked) {
     return (
-      <div className={`tile tile-${size} locked`} data-rarity={rarity}>
-        <span className="mark" aria-hidden="true">
-          🔒
+      <div className={`jewel jewel-${size} is-locked`} data-rarity={rarity}>
+        <span className="socket-well" />
+        <span className="jewel-body locked-body">
+          <span className="jewel-mark" aria-hidden="true">
+            🔒
+          </span>
         </span>
-        <span className="tier">Tier {lockedTier ?? "?"}</span>
-        <span className="name">Undiscovered</span>
+        <span className="jewel-name">Tier {lockedTier ?? "?"}</span>
+        <span className="sr-only">Undiscovered tier {lockedTier ?? "?"}</span>
       </div>
     );
   }
 
   if (!item) {
     return (
-      <div className={`tile tile-${size} vacant`}>
-        <span className="empty-dot" aria-hidden="true" />
-        <span className="sr-only">Empty space</span>
+      <div className={`jewel jewel-${size} is-empty`}>
+        <span className="socket-well" />
+        <span className="sr-only">Empty socket</span>
       </div>
     );
   }
@@ -62,33 +66,46 @@ export function ItemTile({
   return (
     <div
       className={[
-        "tile",
-        `tile-${size}`,
+        "jewel",
+        `jewel-${size}`,
         selected ? "is-selected" : "",
         validTarget ? "is-valid" : "",
         invalidTarget ? "is-invalid" : "",
         dimmed ? "is-dim" : "",
         freshlyMerged ? "is-pop" : "",
         `rarity-${rarity}`,
+        `tier-${item.tier}`,
       ]
         .filter(Boolean)
         .join(" ")}
       style={{
-        borderColor: theme.accent,
-        background: `linear-gradient(180deg, #ffffff 0%, ${theme.wash} 100%)`,
-        boxShadow: `inset 0 1px 0 rgba(255,255,255,0.9), 0 10px 18px ${theme.glow}`,
+        ["--jewel-accent" as string]: theme.accent,
+        ["--jewel-wash" as string]: theme.wash,
+        ["--jewel-deep" as string]: theme.deep,
+        ["--jewel-glow" as string]: theme.glow,
       }}
       data-family={item.familyId}
       data-rarity={rarity}
     >
-      <span className="mark" style={{ color: theme.accent }} aria-hidden="true">
-        {theme.mark}
+      <span className="socket-well" aria-hidden="true" />
+      <span className="jewel-shadow" aria-hidden="true" />
+      <span className="jewel-body">
+        <span className="jewel-facet" aria-hidden="true" />
+        <span className="jewel-shine" aria-hidden="true" />
+        {Array.from({ length: Math.min(tier, 5) }, (_, index) => (
+          <span key={index} className={`jewel-pip pip-${index}`} aria-hidden="true" />
+        ))}
+        <span className="jewel-mark" style={{ color: theme.deep }} aria-hidden="true">
+          {theme.mark}
+        </span>
       </span>
-      <span className="tier">
-        {size === "board" || size === "tray" ? `T${item.tier}` : `T${item.tier} · ${rarityLabel(rarity)}`}
-      </span>
-      <span className="name">{item.shortName}</span>
-      {count > 1 ? <span className="stack">{count}</span> : null}
+      <span className="jewel-name">{item.shortName}</span>
+      {size !== "board" && size !== "tray" ? (
+        <span className="jewel-meta">
+          T{item.tier} · {rarityLabel(rarity)}
+        </span>
+      ) : null}
+      {count > 1 ? <span className="jewel-stack">{count}</span> : null}
       {showMerge ? (
         <button
           type="button"
@@ -99,7 +116,7 @@ export function ItemTile({
             onMerge?.();
           }}
         >
-          {bonusMerge ? "✨ 5 MERGE BONUS!" : "3 to merge"}
+          {bonusMerge ? "5 bonus" : "Merge 3"}
         </button>
       ) : null}
     </div>

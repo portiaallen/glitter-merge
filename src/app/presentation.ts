@@ -9,6 +9,7 @@ export interface FamilyTheme {
   readonly accent: string;
   readonly glow: string;
   readonly wash: string;
+  readonly deep: string;
   readonly mark: string;
   readonly label: string;
 }
@@ -16,43 +17,49 @@ export interface FamilyTheme {
 export const FAMILY_THEMES: Readonly<Record<string, FamilyTheme>> = {
   beauty: {
     accent: "#ff4d8d",
-    glow: "rgba(255, 77, 141, 0.4)",
-    wash: "#ffe0ec",
+    glow: "rgba(255, 77, 141, 0.55)",
+    wash: "#ffd0e4",
+    deep: "#c2185b",
     mark: "✦",
     label: "Beauty",
   },
   fashion: {
-    accent: "#c44dff",
-    glow: "rgba(196, 77, 255, 0.4)",
-    wash: "#f3e0ff",
+    accent: "#d05cff",
+    glow: "rgba(208, 92, 255, 0.5)",
+    wash: "#f0ccff",
+    deep: "#7b1fa2",
     mark: "✿",
     label: "Fashion",
   },
   jewelry: {
-    accent: "#d4a017",
-    glow: "rgba(212, 160, 23, 0.45)",
-    wash: "#fff1cc",
+    accent: "#f0c14b",
+    glow: "rgba(240, 193, 75, 0.55)",
+    wash: "#ffe9a8",
+    deep: "#b8860b",
     mark: "◆",
     label: "Jewelry",
   },
   real_estate: {
-    accent: "#2b9adf",
-    glow: "rgba(43, 154, 223, 0.4)",
-    wash: "#dcefff",
+    accent: "#4fc3ff",
+    glow: "rgba(79, 195, 255, 0.5)",
+    wash: "#c8eeff",
+    deep: "#0277bd",
     mark: "▣",
     label: "Real Estate",
   },
   nightlife: {
-    accent: "#6a4dff",
-    glow: "rgba(106, 77, 255, 0.45)",
-    wash: "#e6deff",
+    accent: "#8b6cff",
+    glow: "rgba(139, 108, 255, 0.55)",
+    wash: "#ddd4ff",
+    deep: "#4527a0",
     mark: "✺",
     label: "Nightlife",
   },
   automobiles: {
-    accent: "#0f9f8a",
-    glow: "rgba(15, 159, 138, 0.4)",
-    wash: "#d4f6ef",
+    accent: "#2dd4bf",
+    glow: "rgba(45, 212, 191, 0.5)",
+    wash: "#c5fff4",
+    deep: "#0f766e",
     mark: "▸",
     label: "Automobiles",
   },
@@ -60,8 +67,9 @@ export const FAMILY_THEMES: Readonly<Record<string, FamilyTheme>> = {
 
 export const DEFAULT_THEME: FamilyTheme = {
   accent: "#ff2e8a",
-  glow: "rgba(255, 46, 138, 0.3)",
+  glow: "rgba(255, 46, 138, 0.4)",
   wash: "#ffe8f2",
+  deep: "#ad1457",
   mark: "★",
   label: "Look",
 };

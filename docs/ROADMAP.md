@@ -14,12 +14,23 @@ Complete. Architecture, data models, persistence, and a playable board shell.
 - Collection screen with locked undiscovered tiers
 - Energy spend on Vanity Case collect only (1 Energy, regenerates)
 
-## Phase 2 — City start (recommended next)
+## Phase 2 — Living destination (started)
 
-- Glitter Neighborhood map with a handful of plots
-- Spend merged resources / Glitter Cash to develop one or two businesses
+Fairyland-structured world, Glitter identity. Presentation first; engine stays the merge foundation.
+
+Now in:
+
+- City brief that gives the next merge a reason (open the Gloss Bar, dress the Boutique)
+- Neighborhood frontage — venues stir and open from existing collection progress
+- Velvet-rope lots for families not discovered yet
+- Discovery copy when a venue lights up
+
+Still next (needs new world/economy rules, not just presentation):
+
+- Spend merged resources / Glitter Cash to develop businesses
 - Construction timers using the existing timer module
-- Unlock rules that stay data-driven
+- Data-driven district unlocks (Rainbow Heights and beyond)
+- Characters and story beats (luxury / queer culture — not fantasy prophecy)
 
 ## Phase 3 — Content & retention
 
