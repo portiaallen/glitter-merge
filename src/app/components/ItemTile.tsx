@@ -86,6 +86,7 @@ export function ItemTile({
       }}
       data-family={item.familyId}
       data-rarity={rarity}
+      data-tier={item.tier}
     >
       <span className="socket-well" aria-hidden="true" />
       <span className="jewel-shadow" aria-hidden="true" />

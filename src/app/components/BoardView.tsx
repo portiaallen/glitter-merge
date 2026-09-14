@@ -31,12 +31,14 @@ function worldAnchor(row: number, col: number, width: number, height: number) {
   const socketHeight = Math.min(16, 78 / height);
   const x = 15 + (width > 1 ? (col / (width - 1)) * 70 : 35) + (row % 2 === 1 ? 2 : 0);
   const y = 13 + (height > 1 ? (row / (height - 1)) * 72 : 36);
+  const lift = (row + 1) * 0.6 + (col % 2 === 0 ? 0.6 : 0);
 
   return {
     left: `${x - socketWidth / 2}%`,
     top: `${y - socketHeight / 2}%`,
     width: `${socketWidth}%`,
     height: `${socketHeight}%`,
+    transform: `translateY(${lift}px) rotateX(12deg)`,
   };
 }
 
@@ -79,7 +81,7 @@ export function BoardView({
   const moveGhost = (x: number, y: number) => {
     const ghost = ghostRef.current;
     if (!ghost) return;
-    ghost.style.transform = `translate(${x - 40}px, ${y - 48}px)`;
+    ghost.style.transform = `translate(${x - 40}px, ${y - 52}px) scale(1.18) rotate(-8deg)`;
   };
 
   const handleTap = (coord: Coord) => {

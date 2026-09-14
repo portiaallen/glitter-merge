@@ -679,45 +679,48 @@ h2 {
   flex: 1;
   min-height: clamp(390px, 56dvh, 620px);
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.72);
-  border-radius: 32px;
+  border: 1px solid rgba(255, 255, 255, 0.74);
+  border-radius: 34px;
   background:
-    radial-gradient(ellipse at 18% 18%, rgba(255, 255, 255, 0.82) 0 7%, transparent 18%),
-    radial-gradient(ellipse at 86% 70%, rgba(102, 211, 190, 0.72) 0 8%, transparent 18%),
-    linear-gradient(145deg, #baf0d3 0%, #7fd5bd 32%, #f6d3ce 72%, #f3b5c9 100%);
+    radial-gradient(ellipse at 18% 18%, rgba(255, 255, 255, 0.85) 0 8%, transparent 20%),
+    radial-gradient(ellipse at 85% 75%, rgba(72, 224, 210, 0.7) 0 10%, transparent 24%),
+    linear-gradient(145deg, #d4f9e7 0%, #8fe3d4 26%, #f7d3d8 62%, #f4b3d9 100%);
   box-shadow:
-    0 24px 44px rgba(72, 24, 57, 0.22),
-    inset 0 1px 0 #fff,
-    inset 0 -24px 34px rgba(46, 125, 102, 0.14),
-    inset 0 0 0 5px rgba(237, 199, 101, 0.14);
+    0 30px 52px rgba(68, 22, 63, 0.26),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    inset 0 -30px 38px rgba(68, 132, 112, 0.18),
+    inset 0 0 0 5px rgba(255, 202, 86, 0.18);
+  perspective: 1400px;
+  isolation: isolate;
 }
 
 .plot::before {
   content: "";
   position: absolute;
-  inset: 16% 10% 8%;
+  inset: 14% 8% 9%;
   border-radius: 42% 48% 38% 52%;
   background:
-    radial-gradient(circle at 10% 25%, rgba(255, 255, 255, 0.72) 0 5px, transparent 6px),
-    radial-gradient(circle at 85% 24%, rgba(255, 255, 255, 0.62) 0 4px, transparent 5px),
-    radial-gradient(circle at 76% 78%, rgba(255, 240, 167, 0.8) 0 5px, transparent 6px),
-    linear-gradient(115deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.02) 44%, rgba(255, 255, 255, 0.18));
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.3), 0 12px 26px rgba(42, 116, 93, 0.16);
+    radial-gradient(circle at 12% 26%, rgba(255, 255, 255, 0.78) 0 8px, transparent 10px),
+    radial-gradient(circle at 84% 24%, rgba(255, 255, 255, 0.7) 0 5px, transparent 7px),
+    radial-gradient(circle at 74% 78%, rgba(255, 228, 128, 0.82) 0 8px, transparent 10px),
+    linear-gradient(115deg, rgba(255, 255, 255, 0.26), rgba(255, 255, 255, 0.08) 42%, rgba(255, 255, 255, 0.22));
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.38), 0 16px 28px rgba(35, 110, 92, 0.18);
   pointer-events: none;
   z-index: 1;
+  transform: rotateX(12deg);
 }
 
 .plot::after {
   content: "";
   position: absolute;
-  right: -7%;
-  bottom: 6%;
+  right: -8%;
+  bottom: 7%;
   width: 30%;
   height: 18%;
   border-radius: 50%;
-  background: radial-gradient(ellipse at 35% 35%, rgba(255, 255, 255, 0.72), transparent 22%),
-    linear-gradient(145deg, rgba(112, 221, 232, 0.9), rgba(91, 137, 224, 0.72));
-  box-shadow: inset 0 3px 0 rgba(255, 255, 255, 0.55), 0 12px 20px rgba(47, 100, 137, 0.18);
+  background: radial-gradient(ellipse at 35% 35%, rgba(255, 255, 255, 0.78), transparent 26%),
+    linear-gradient(145deg, rgba(124, 226, 228, 0.95), rgba(86, 129, 232, 0.72));
+  box-shadow: inset 0 3px 0 rgba(255, 255, 255, 0.6), 0 14px 22px rgba(45, 96, 164, 0.2);
   transform: rotate(-12deg);
   pointer-events: none;
   z-index: 1;
@@ -808,6 +811,7 @@ h2 {
   display: block;
   touch-action: none;
   z-index: 4;
+  perspective: 1200px;
 }
 
 .socket {
@@ -818,20 +822,21 @@ h2 {
   justify-content: center;
   cursor: pointer;
   user-select: none;
-  border-radius: 18px;
+  border-radius: 20px;
   transition: transform 0.18s ease, filter 0.18s ease;
+  transform-style: preserve-3d;
 }
 
 .socket.selected .jewel-body {
-  transform: translateY(-6px) scale(1.06);
+  transform: translateY(-6px) scale(1.08) rotateX(12deg);
 }
 
 .socket.selected {
-  filter: drop-shadow(0 8px 10px rgba(53, 20, 56, 0.16));
+  filter: drop-shadow(0 10px 12px rgba(53, 20, 56, 0.2));
 }
 
 .socket.selected .socket-well {
-  box-shadow: 0 0 0 3px var(--cobalt), 0 0 18px rgba(71, 120, 232, 0.36), inset 0 6px 10px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 0 0 3px rgba(85, 140, 255, 0.96), 0 0 18px rgba(77, 126, 255, 0.46), inset 0 6px 10px rgba(0, 0, 0, 0.18);
 }
 
 .socket.dragging .jewel-body {
@@ -839,11 +844,12 @@ h2 {
 }
 
 .socket.valid-target .socket-well {
-  box-shadow: 0 0 0 3px var(--turquoise), 0 0 16px rgba(49, 205, 184, 0.42), inset 0 6px 10px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 0 0 3px rgba(61, 217, 192, 0.96), 0 0 18px rgba(61, 217, 192, 0.5), inset 0 6px 10px rgba(0, 0, 0, 0.18);
+  animation: pulseValid 1.2s ease-in-out infinite;
 }
 
 .socket.invalid-target .socket-well {
-  box-shadow: 0 0 0 3px var(--coral), inset 0 6px 10px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 0 0 3px rgba(255, 95, 116, 0.9), inset 0 6px 10px rgba(0, 0, 0, 0.18);
 }
 
 .socket.drop-hover {
@@ -852,7 +858,7 @@ h2 {
 
 .socket.burst .jewel-body,
 .socket.burst-bonus .jewel-body {
-  animation: pop 0.5s ease;
+  animation: pop 0.52s ease;
 }
 
 .socket.burst::after,
@@ -870,7 +876,7 @@ h2 {
 }
 
 .socket.burst .jewel-body {
-  filter: brightness(1.08) saturate(1.12);
+  filter: brightness(1.12) saturate(1.15);
 }
 
 .jewel {
@@ -891,8 +897,9 @@ h2 {
   bottom: 12%;
   height: 22%;
   border-radius: 50%;
-  background: rgba(76, 77, 112, 0.28);
-  box-shadow: inset 0 5px 8px rgba(53, 20, 56, 0.18), 0 1px 0 rgba(255, 255, 255, 0.5);
+  background: linear-gradient(180deg, rgba(77, 89, 126, 0.38), rgba(38, 42, 76, 0.26));
+  box-shadow: inset 0 6px 10px rgba(53, 20, 56, 0.18), 0 1px 0 rgba(255, 255, 255, 0.52);
+  border: 1px solid rgba(255, 255, 255, 0.18);
 }
 
 .socket.empty .socket-well {
@@ -917,30 +924,34 @@ h2 {
   aspect-ratio: 1;
   border-radius: 46% 46% 42% 42%;
   background:
-    radial-gradient(circle at 32% 28%, #fff 0 8%, transparent 18%),
-    radial-gradient(circle at 50% 45%, var(--jewel-wash, #ffe0ec), var(--jewel-accent, #ff4d8d) 58%, var(--jewel-deep, #c2185b));
+    radial-gradient(circle at 32% 28%, rgba(255, 255, 255, 0.93) 0 10%, transparent 18%),
+    linear-gradient(135deg, var(--jewel-wash, #ffe0ec) 0%, var(--jewel-accent, #ff4d8d) 56%, var(--jewel-deep, #c2185b) 100%);
   box-shadow:
-    0 10px 14px var(--jewel-glow, rgba(255, 77, 141, 0.4)),
-    inset 0 -8px 12px rgba(0, 0, 0, 0.18),
-    inset 0 6px 8px rgba(255, 255, 255, 0.35);
+    0 16px 22px var(--jewel-glow, rgba(255, 77, 141, 0.5)),
+    inset 0 -10px 14px rgba(24, 8, 24, 0.18),
+    inset 0 8px 12px rgba(255, 255, 255, 0.42),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.22);
   display: grid;
   place-items: center;
-  transition: transform 0.18s ease, opacity 0.18s ease;
+  transition: transform 0.18s ease, opacity 0.18s ease, box-shadow 0.18s ease;
+  transform: translateY(0) rotateX(14deg);
 }
 
 .jewel.tier-2 .jewel-body {
   box-shadow:
-    0 10px 14px var(--jewel-glow, rgba(255, 77, 141, 0.4)),
-    inset 0 -8px 12px rgba(0, 0, 0, 0.16),
-    inset 0 6px 8px rgba(255, 255, 255, 0.42);
+    0 18px 26px var(--jewel-glow, rgba(255, 77, 141, 0.52)),
+    inset 0 -10px 14px rgba(24, 8, 24, 0.2),
+    inset 0 8px 12px rgba(255, 255, 255, 0.46),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.25);
 }
 
 .jewel.tier-3 .jewel-body {
   box-shadow:
     0 0 0 1px rgba(255, 255, 255, 0.7),
-    0 12px 18px var(--jewel-glow, rgba(255, 77, 141, 0.45)),
-    inset 0 -8px 12px rgba(0, 0, 0, 0.18),
-    inset 0 6px 8px rgba(255, 255, 255, 0.48);
+    0 18px 28px var(--jewel-glow, rgba(255, 77, 141, 0.54)),
+    inset 0 -10px 14px rgba(24, 8, 24, 0.2),
+    inset 0 8px 12px rgba(255, 255, 255, 0.48),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.25);
 }
 
 .jewel-facet {
@@ -1087,18 +1098,19 @@ h2 {
   font-weight: 800;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  background: #0f9f8a;
+  background: linear-gradient(180deg, #5ae2d1, #178f87);
   color: #fff;
   border-radius: 999px;
   padding: 2px 6px;
+  box-shadow: 0 4px 10px rgba(0, 135, 119, 0.24);
 }
 
 .dest-label.move {
-  background: #5b3dff;
+  background: linear-gradient(180deg, #7a76ff, #4d4ccf);
 }
 
 .dest-label.no {
-  background: #8a2433;
+  background: linear-gradient(180deg, #ff8b80, #b44040);
 }
 
 .drag-ghost {
@@ -1110,8 +1122,13 @@ h2 {
   z-index: 40;
   pointer-events: none;
   transform: translate(-999px, -999px);
-  filter: drop-shadow(0 22px 18px rgba(42, 16, 48, 0.34));
+  filter: drop-shadow(0 24px 18px rgba(42, 16, 48, 0.3));
   transform-origin: center center;
+  transition: transform 0.08s linear;
+}
+
+.drag-ghost .jewel-body {
+  box-shadow: 0 22px 30px rgba(255, 94, 168, 0.42), inset 0 -10px 14px rgba(24, 8, 24, 0.2), inset 0 8px 12px rgba(255, 255, 255, 0.44);
 }
 
 .apron {
@@ -1404,13 +1421,24 @@ h2 {
   }
 }
 
+@keyframes pulseValid {
+  0%,
+  100% {
+    box-shadow: 0 0 0 3px rgba(61, 217, 192, 0.96), 0 0 12px rgba(61, 217, 192, 0.45), inset 0 6px 10px rgba(0, 0, 0, 0.18);
+  }
+  50% {
+    box-shadow: 0 0 0 4px rgba(61, 217, 192, 0.96), 0 0 22px rgba(61, 217, 192, 0.6), inset 0 6px 10px rgba(0, 0, 0, 0.18);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .spark,
   .jewel.is-pop,
   .socket.burst::after,
   .socket.burst-bonus::after,
   .merge-chip.bonus,
-  .jewel-body {
+  .jewel-body,
+  .socket.valid-target .socket-well {
     animation: none;
     transition: none;
   }
