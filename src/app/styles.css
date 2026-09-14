@@ -680,7 +680,7 @@ h2 {
   min-height: clamp(390px, 56dvh, 620px);
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.74);
-  border-radius: 34px;
+  border-radius: 42px;
   background:
     radial-gradient(ellipse at 18% 18%, rgba(255, 255, 255, 0.85) 0 8%, transparent 20%),
     radial-gradient(ellipse at 85% 75%, rgba(72, 224, 210, 0.7) 0 10%, transparent 24%),
@@ -797,6 +797,63 @@ h2 {
   pointer-events: none;
 }
 
+.play-surface {
+  position: absolute;
+  inset: 15% 6% 8%;
+  z-index: 2;
+  overflow: hidden;
+  border: 2px solid rgba(255, 255, 255, 0.68);
+  border-radius: 22% 18% 26% 15% / 16% 22% 15% 24%;
+  background:
+    radial-gradient(circle at 20% 18%, rgba(255, 255, 255, 0.72) 0 3px, transparent 4px),
+    radial-gradient(circle at 78% 78%, rgba(255, 230, 135, 0.78) 0 4px, transparent 5px),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.46), rgba(255, 255, 255, 0.08) 42%),
+    linear-gradient(145deg, #f8c7e1, #cdb9f3 48%, #92ddd3);
+  box-shadow:
+    0 22px 0 rgba(122, 67, 137, 0.2),
+    0 34px 34px rgba(73, 26, 78, 0.28),
+    inset 0 2px 0 rgba(255, 255, 255, 0.8),
+    inset 0 -20px 24px rgba(85, 54, 132, 0.16);
+  transform: rotateX(10deg) rotateZ(-1deg);
+  transform-origin: center bottom;
+}
+
+.play-surface::before,
+.play-surface::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  border-radius: 50%;
+}
+
+.play-surface::before {
+  inset: 8% 12% auto;
+  height: 15%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.7), transparent);
+  transform: rotate(-5deg);
+}
+
+.play-surface::after {
+  right: -8%;
+  bottom: -12%;
+  width: 42%;
+  height: 34%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.48), transparent 68%);
+}
+
+.surface-ribbon {
+  position: absolute;
+  left: 7%;
+  right: 7%;
+  top: 10%;
+  height: 5px;
+  z-index: 1;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #ff76b9, #ffe38b 42%, #61ded0 72%, #a98cff);
+  box-shadow: 0 0 16px rgba(255, 255, 255, 0.8);
+  transform: rotate(-2deg);
+}
+
 .terrace-vein {
   position: absolute;
   inset: 18% 10% auto;
@@ -825,6 +882,7 @@ h2 {
   border-radius: 20px;
   transition: transform 0.18s ease, filter 0.18s ease;
   transform-style: preserve-3d;
+  transform: translateY(var(--world-lift, 0px));
 }
 
 .socket.selected .jewel-body {
@@ -853,7 +911,7 @@ h2 {
 }
 
 .socket.drop-hover {
-  transform: scale(1.04);
+  transform: translateY(calc(var(--world-lift, 0px) - 4px)) scale(1.06);
 }
 
 .socket.burst .jewel-body,
@@ -920,7 +978,7 @@ h2 {
 .jewel-body {
   position: relative;
   z-index: 1;
-  width: min(58px, 72%);
+  width: min(78px, 88%);
   aspect-ratio: 1;
   border-radius: 46% 46% 42% 42%;
   background:
@@ -952,6 +1010,40 @@ h2 {
     inset 0 -10px 14px rgba(24, 8, 24, 0.2),
     inset 0 8px 12px rgba(255, 255, 255, 0.48),
     inset 0 0 0 1px rgba(255, 255, 255, 0.25);
+}
+
+.jewel.tier-4 .jewel-body,
+.jewel.tier-5 .jewel-body {
+  width: min(84px, 94%);
+  border-radius: 38% 38% 48% 48%;
+}
+
+.jewel[data-family="beauty"] .jewel-body {
+  border-radius: 48% 48% 38% 38%;
+}
+
+.jewel[data-family="fashion"] .jewel-body {
+  border-radius: 42% 42% 30% 30%;
+  transform: translateY(0) rotateX(14deg) rotateZ(-3deg);
+}
+
+.jewel[data-family="jewelry"] .jewel-body {
+  border-radius: 28% 50% 28% 50%;
+  transform: translateY(0) rotateX(14deg) rotateZ(4deg);
+}
+
+.jewel[data-family="real_estate"] .jewel-body {
+  border-radius: 22% 22% 34% 34%;
+}
+
+.jewel[data-family="nightlife"] .jewel-body {
+  border-radius: 50% 34% 50% 34%;
+  transform: translateY(0) rotateX(14deg) rotateZ(-5deg);
+}
+
+.jewel[data-family="automobiles"] .jewel-body {
+  border-radius: 34% 34% 48% 48%;
+  transform: translateY(0) rotateX(14deg) rotateZ(2deg);
 }
 
 .jewel-facet {
@@ -988,7 +1080,7 @@ h2 {
 .pip-4 { top: 36%; left: 14%; }
 
 .jewel-mark {
-  font-size: 18px;
+  font-size: 22px;
   line-height: 1;
   text-shadow: 0 1px 0 #fff8;
 }
@@ -1453,6 +1545,14 @@ h2 {
 
   .jewel-name {
     font-size: 10px;
+  }
+
+  .play-surface {
+    inset: 17% 2% 7%;
+  }
+
+  .jewel-body {
+    width: min(68px, 90%);
   }
 }
 

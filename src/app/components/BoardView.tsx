@@ -38,7 +38,7 @@ function worldAnchor(row: number, col: number, width: number, height: number) {
     top: `${y - socketHeight / 2}%`,
     width: `${socketWidth}%`,
     height: `${socketHeight}%`,
-    transform: `translateY(${lift}px) rotateX(12deg)`,
+    "--world-lift": `${lift}px`,
   };
 }
 
@@ -170,13 +170,15 @@ export function BoardView({
       <span className="corner-bloom ne" aria-hidden="true" />
       <span className="corner-bloom sw" aria-hidden="true" />
       <span className="corner-bloom se" aria-hidden="true" />
-      <div
-        className="sockets"
-        role="grid"
-        aria-label="Merge field"
-        aria-rowcount={state.board.height}
-        aria-colcount={state.board.width}
-      >
+      <div className="play-surface">
+        <div className="surface-ribbon" aria-hidden="true" />
+        <div
+          className="sockets"
+          role="grid"
+          aria-label="Merge field"
+          aria-rowcount={state.board.height}
+          aria-colcount={state.board.width}
+        >
         {state.board.cells.flatMap((row, rowIndex) =>
           row.map((cell, colIndex) => {
             const coord = { row: rowIndex, col: colIndex };
@@ -281,8 +283,9 @@ export function BoardView({
             );
           }),
         )}
+        </div>
+        <div className="terrace-steps" aria-hidden="true" />
       </div>
-      <div className="terrace-steps" aria-hidden="true" />
       {dragging && dragItem ? (
         <div ref={ghostRef} className="drag-ghost" aria-hidden="true">
           <ItemTile item={dragItem} count={getCell(state.board, dragging)?.items.length ?? 1} />
