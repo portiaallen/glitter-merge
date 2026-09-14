@@ -10,14 +10,18 @@ import {
 } from "@game/index";
 import { playCue } from "./audio/cues";
 import { BoardView } from "./components/BoardView";
-import { CoachBanner } from "./components/CoachBanner";
+import { CityBrief } from "./components/CityBrief";
 import { CollectionScreen } from "./components/CollectionScreen";
 import { DiscoveryModal } from "./components/DiscoveryModal";
 import { FeedbackBar } from "./components/FeedbackBar";
 import { GeneratorDock } from "./components/GeneratorDock";
 import { Hud } from "./components/Hud";
 import { InventoryTray } from "./components/InventoryTray";
+import { destinationBrief } from "./destination/brief";
+import { neighborhoodVenues, venueOpenedByItem } from "./destination/landmarks";
 import { useGame } from "./hooks/useGame";
+import { Environment } from "./world/Environment";
+import { Neighborhood } from "./world/Neighborhood";
 
 export function App() {
   const { state, catalog, clock, events, selected, setSelected, dispatch, reset } =
@@ -64,10 +68,10 @@ export function App() {
     : null;
   const coach = selectedItem
     ? mergeCoach(selectedCount, Boolean(catalog.nextTier(selectedItem.id)))
-    : {
-        tone: "idle" as const,
-        label: "Stack 3 of a look to merge. Stack 5 for extra glam.",
-      };
+    : null;
+  const brief = destinationBrief(state, catalog);
+  const venues = neighborhoodVenues(state, catalog);
+  const openedVenue = discoveryId ? venueOpenedByItem(discoveryId, catalog, state) : null;
 
   const drop = (from: Coord, to: Coord) => {
     const target = getCell(state.board, to);
@@ -109,64 +113,76 @@ export function App() {
     setSelected(coord);
   };
 
-  if (view === "collection") {
-    return (
-      <div className="shell">
-        <div className="rainbow" aria-hidden="true" />
+  return (
+    <div className="stage">
+      <Environment />
+      <div className="stage-ui">
+        <Hud state={state} catalog={catalog} onOpenCollection={() => setView("collection")} />
+        <div className="grounds">
+          <CityBrief
+            brief={brief}
+            selectedHint={preview?.hint ?? coach?.label ?? null}
+          />
+          <Neighborhood venues={venues} focusId={brief.venueId}>
+            <BoardView
+              state={state}
+              catalog={catalog}
+              selected={selected}
+              burstAt={burstAt}
+              burstBonus={burstBonus}
+              reclaimMode={vaultIndex !== null}
+              onSelect={handleBoardSelect}
+              onDrop={drop}
+              onMerge={mergeAt}
+            />
+          </Neighborhood>
+          <div className="apron">
+            <GeneratorDock
+              state={state}
+              catalog={catalog}
+              now={clock.now()}
+              onCollect={() =>
+                dispatch({
+                  type: "COLLECT_GENERATOR",
+                  generatorId: "vanity_case",
+                  to: null,
+                })
+              }
+            />
+            <InventoryTray
+              state={state}
+              catalog={catalog}
+              selectedIndex={vaultIndex}
+              onSelect={setVaultIndex}
+              onReclaim={(index, to) =>
+                dispatch({ type: "RECLAIM", inventoryIndex: index, to })
+              }
+            />
+          </div>
+        </div>
+        <div className="stage-foot">
+          <FeedbackBar events={events} />
+          <button type="button" className="text-btn" onClick={reset}>
+            New Game
+          </button>
+        </div>
+      </div>
+      {view === "collection" ? (
         <CollectionScreen
           state={state}
           catalog={catalog}
           onClose={() => setView("board")}
         />
-      </div>
-    );
-  }
-
-  return (
-    <div className="shell">
-      <div className="rainbow" aria-hidden="true" />
-      <Hud state={state} catalog={catalog} onOpenCollection={() => setView("collection")} />
-      <CoachBanner hint={coach} preview={preview?.hint ?? null} />
-      <BoardView
-        state={state}
-        catalog={catalog}
-        selected={selected}
-        burstAt={burstAt}
-        burstBonus={burstBonus}
-        reclaimMode={vaultIndex !== null}
-        onSelect={handleBoardSelect}
-        onDrop={drop}
-        onMerge={mergeAt}
-      />
-      <GeneratorDock
-        state={state}
-        catalog={catalog}
-        now={clock.now()}
-        onCollect={() =>
-          dispatch({
-            type: "COLLECT_GENERATOR",
-            generatorId: "vanity_case",
-            to: null,
-          })
-        }
-      />
-      <InventoryTray
-        state={state}
-        catalog={catalog}
-        selectedIndex={vaultIndex}
-        onSelect={setVaultIndex}
-        onReclaim={(index, to) => dispatch({ type: "RECLAIM", inventoryIndex: index, to })}
-      />
-      <FeedbackBar events={events} />
-      <footer className="footer">
-        <button type="button" className="btn ghost" onClick={reset}>
-          New Game
-        </button>
-      </footer>
+      ) : null}
       {discoveryId ? (
         <DiscoveryModal
           itemId={discoveryId}
           catalog={catalog}
+          venueLine={
+            openedVenue
+              ? `${openedVenue.name} just lit up on the block.`
+              : null
+          }
           onDismiss={() => setDiscoveryId(null)}
         />
       ) : null}

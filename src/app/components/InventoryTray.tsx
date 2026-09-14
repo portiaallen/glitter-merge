@@ -19,14 +19,9 @@ export function InventoryTray({
   if (state.inventory.length === 0) return null;
 
   return (
-    <section className="vault" aria-label="Overflow vault">
-      <div>
-        <p className="eyebrow">Vault</p>
-        <p className="dock-copy">
-          Extra looks wait here. Tap one, then tap an empty tile — stacks stay put.
-        </p>
-      </div>
-      <ul className="vault-row">
+    <section className="clutch" aria-label="Overflow vault">
+      <p className="clutch-label">Vault</p>
+      <ul className="clutch-row">
         {state.inventory.map((entry, index) => {
           const item = catalog.getItem(entry.itemId) ?? null;
           const selected = selectedIndex === index;
@@ -34,7 +29,7 @@ export function InventoryTray({
             <li key={entry.instanceId}>
               <button
                 type="button"
-                className={selected ? "vault-item selected" : "vault-item"}
+                className={selected ? "clutch-item selected" : "clutch-item"}
                 aria-pressed={selected}
                 aria-label={`${item?.name ?? "Look"} in vault${selected ? ", selected" : ""}`}
                 onClick={() => {

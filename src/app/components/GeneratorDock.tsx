@@ -33,27 +33,31 @@ export function GeneratorDock({
   const canAfford = energy >= COLLECT_ENERGY_COST;
   const canCollect = ready && canAfford;
 
-  let copy = `Next lip balm in ${formatMs(wait)}`;
+  let copy = `Next in ${formatMs(wait)}`;
   if (ready && canAfford) {
-    copy = `${generator?.storedCount} ready · costs ${COLLECT_ENERGY_COST} Energy`;
+    copy = `${generator?.storedCount} ready · ${COLLECT_ENERGY_COST} Energy`;
   } else if (ready && !canAfford) {
-    copy = "Energy recovering. Merge what's on the board.";
+    copy = "Energy recovering";
   }
 
   return (
-    <section className="dock" aria-label="Vanity Case">
-      <div>
-        <p className="eyebrow">Producer</p>
+    <section className="vanity-prop" aria-label="Vanity Case">
+      <div className="vanity-case" aria-hidden="true">
+        <span className="vanity-lid" />
+        <span className="vanity-body" />
+        <span className="vanity-clasp" />
+      </div>
+      <div className="vanity-copy">
         <h2>{definition?.name ?? "Vanity Case"}</h2>
-        <p className="dock-copy">{copy}</p>
+        <p>{copy}</p>
       </div>
       <button
         type="button"
-        className={canCollect ? "btn primary" : "btn"}
+        className={canCollect ? "jewel-btn ready" : "jewel-btn"}
         onClick={onCollect}
         disabled={!canCollect}
       >
-        {canCollect ? `Collect · ${COLLECT_ENERGY_COST} Energy` : ready ? "Need energy" : "Working"}
+        {canCollect ? "Collect" : ready ? "Need energy" : "Working"}
       </button>
     </section>
   );

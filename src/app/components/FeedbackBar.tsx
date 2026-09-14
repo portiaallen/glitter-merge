@@ -13,10 +13,10 @@ export function FeedbackBar({ events }: FeedbackBarProps) {
     ? rewarded && latest.kind === "merged"
       ? `${latest.message} ${rewarded.message}`
       : latest.message
-    : "Merge looks. Discover new glam. Do it again.";
+    : "Stack matching jewels. Discover new glam.";
 
   return (
-    <div className="feedback" role="status" aria-live="polite">
+    <div className="toast" role="status" aria-live="polite">
       <p>{text}</p>
     </div>
   );
