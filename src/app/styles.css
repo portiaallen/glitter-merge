@@ -1,0 +1,313 @@
+:root {
+  color-scheme: light;
+  --cream: #fff6f0;
+  --blush: #ffe1ec;
+  --pink: #ff2e8a;
+  --hot: #ff4d8d;
+  --gold: #e8b86d;
+  --violet: #7b5cff;
+  --ink: #2a1030;
+  --muted: #7a4b62;
+  --card: rgba(255, 255, 255, 0.78);
+  --line: rgba(255, 46, 138, 0.16);
+  font-family: Outfit, "Trebuchet MS", sans-serif;
+  background: var(--cream);
+  color: var(--ink);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(1200px 600px at 10% -10%, #ffd0e6 0%, transparent 55%),
+    radial-gradient(900px 500px at 110% 0%, #d9c8ff 0%, transparent 50%),
+    radial-gradient(800px 400px at 50% 120%, #ffe7b8 0%, transparent 45%),
+    var(--cream);
+}
+
+button,
+input {
+  font: inherit;
+}
+
+.shell {
+  width: min(480px, 100%);
+  margin: 0 auto;
+  padding: 16px 16px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.rainbow {
+  height: 8px;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    #ff3b30,
+    #ff8a00,
+    #ffd400,
+    #4cd964,
+    #5ac8fa,
+    #af52de
+  );
+  box-shadow: 0 8px 24px rgba(255, 46, 138, 0.25);
+}
+
+.hud,
+.dock,
+.footer {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  padding: 16px;
+  backdrop-filter: blur(16px);
+}
+
+.eyebrow {
+  margin: 0 0 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 11px;
+  color: var(--pink);
+  font-weight: 700;
+}
+
+h1,
+h2 {
+  font-family: Fraunces, Georgia, serif;
+  margin: 0;
+}
+
+h1 {
+  font-size: 34px;
+  letter-spacing: -0.03em;
+}
+
+h2 {
+  font-size: 20px;
+}
+
+.tagline,
+.dock-copy,
+.help,
+.status,
+.inventory-note,
+.area {
+  margin: 6px 0 0;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.area {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.wallet {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  padding: 14px 0 0;
+  margin: 0;
+}
+
+.wallet li {
+  background: #fff;
+  border-radius: 16px;
+  padding: 8px 6px;
+  text-align: center;
+  border: 1px solid var(--line);
+}
+
+.wallet-value {
+  display: block;
+  font-weight: 700;
+}
+
+.wallet-label {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.dock {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.help {
+  margin: 0 4px;
+  font-size: 14px;
+}
+
+.board {
+  display: grid;
+  gap: 8px;
+  touch-action: none;
+}
+
+.cell {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 18px;
+  border: 1px dashed rgba(255, 46, 138, 0.2);
+  background: rgba(255, 255, 255, 0.55);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 6px;
+  color: inherit;
+  cursor: pointer;
+  user-select: none;
+}
+
+.cell.filled {
+  background: linear-gradient(180deg, #fff 0%, #fff4fa 100%);
+  border-style: solid;
+}
+
+.cell.selected {
+  outline: 3px solid var(--pink);
+  outline-offset: 1px;
+}
+
+.cell.dragging {
+  opacity: 0.7;
+  transform: scale(0.96);
+}
+
+.cell.mergeable {
+  animation: pulse 1.4s ease-in-out infinite;
+}
+
+.mark {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.tier {
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.name {
+  font-size: 11px;
+  font-weight: 650;
+  text-align: center;
+  line-height: 1.15;
+}
+
+.stack,
+.merge-chip {
+  position: absolute;
+  right: 6px;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+  padding: 0 5px;
+}
+
+.stack {
+  top: 6px;
+  background: var(--ink);
+  color: #fff;
+}
+
+.merge-chip {
+  bottom: 6px;
+  right: auto;
+  background: var(--gold);
+  color: var(--ink);
+}
+
+.empty-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 46, 138, 0.18);
+}
+
+.btn {
+  border: 0;
+  border-radius: 999px;
+  padding: 12px 18px;
+  background: #fff;
+  color: var(--ink);
+  font-weight: 700;
+  box-shadow: 0 8px 20px rgba(42, 16, 48, 0.08);
+}
+
+.btn.primary {
+  background: linear-gradient(135deg, var(--pink), var(--violet));
+  color: #fff;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+}
+
+.btn.ghost {
+  background: transparent;
+  box-shadow: none;
+  color: var(--pink);
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.status {
+  margin: 0;
+}
+
+.inventory-note {
+  margin: 0 4px;
+  font-weight: 600;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+@keyframes pulse {
+  50% {
+    transform: translateY(-1px);
+  }
+}
+
+@media (min-width: 720px) {
+  .shell {
+    padding-top: 28px;
+  }
+}
