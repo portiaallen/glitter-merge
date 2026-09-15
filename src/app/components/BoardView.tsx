@@ -160,30 +160,16 @@ export function BoardView({
 
   return (
     <div className="plot">
-      <div className="world-sign" aria-hidden="true">
-        <span>GLITTER GARDENS</span>
-        <small>MERGE YOUR MAGIC</small>
-      </div>
-      <div className="terrace-rail" aria-hidden="true" />
-      <div className="terrace-rim" aria-hidden="true" />
-      <div className="terrace-vein" aria-hidden="true" />
-      <span className="corner-bloom nw" aria-hidden="true" />
-      <span className="corner-bloom ne" aria-hidden="true" />
-      <span className="corner-bloom sw" aria-hidden="true" />
-      <span className="corner-bloom se" aria-hidden="true" />
-      <div className="garden-edge garden-edge-left" aria-hidden="true" />
-      <div className="garden-edge garden-edge-right" aria-hidden="true" />
-      <div className="play-surface">
-        <div className="surface-ribbon" aria-hidden="true" />
-        <div className="surface-pond" aria-hidden="true" />
-        <div className="surface-flowers" aria-hidden="true" />
-        <div
-          className="sockets"
-          role="grid"
-          aria-label="Merge field"
-          aria-rowcount={state.board.height}
-          aria-colcount={state.board.width}
-        >
+      <div className="world-water" aria-hidden="true" />
+      <div className="world-path" aria-hidden="true" />
+      <div className="world-sparkles" aria-hidden="true" />
+      <div
+        className="sockets"
+        role="grid"
+        aria-label="Merge field"
+        aria-rowcount={state.board.height}
+        aria-colcount={state.board.width}
+      >
         {state.board.cells.flatMap((row, rowIndex) =>
           row.map((cell, colIndex) => {
             const coord = { row: rowIndex, col: colIndex };
@@ -288,8 +274,6 @@ export function BoardView({
             );
           }),
         )}
-        </div>
-        <div className="terrace-steps" aria-hidden="true" />
       </div>
       {dragging && dragItem ? (
         <div ref={ghostRef} className="drag-ghost" aria-hidden="true">

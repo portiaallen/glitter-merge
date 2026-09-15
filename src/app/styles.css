@@ -1884,3 +1884,337 @@ h2 {
     height: 14%;
   }
 }
+
+.stage {
+  min-height: 100dvh;
+  height: 100dvh;
+  overflow: hidden;
+  background: #7dd9cf;
+}
+
+.environment {
+  z-index: 0;
+  background: linear-gradient(180deg, #8adfff 0 34%, #5bc3bd 35% 100%);
+}
+
+.sky {
+  background:
+    radial-gradient(circle at 18% 16%, rgba(255, 255, 255, 0.9) 0 3%, transparent 12%),
+    radial-gradient(circle at 76% 10%, rgba(255, 240, 183, 0.88) 0 4%, transparent 15%),
+    linear-gradient(180deg, #75d8ff 0%, #c2f2ef 44%, #70d5bb 100%);
+}
+
+.hills {
+  bottom: 0;
+  height: 55%;
+  opacity: 0.9;
+}
+
+.hill-a {
+  background: linear-gradient(180deg, #66d88e, #34a878);
+}
+
+.hill-b {
+  background: linear-gradient(180deg, #a3e7b3, #58bf8f);
+}
+
+.hill-c {
+  background: linear-gradient(180deg, #61d4c1, #2d9fa2);
+}
+
+.skyline,
+.palms,
+.lanterns,
+.distant-grove,
+.foreground-garden {
+  opacity: 0.68;
+}
+
+.stage-ui {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  height: 100dvh;
+  min-height: 0;
+  padding: max(12px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right))
+    max(12px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+  display: block;
+}
+
+.float-hud {
+  position: absolute;
+  top: max(12px, env(safe-area-inset-top));
+  left: max(16px, env(safe-area-inset-left));
+  right: max(16px, env(safe-area-inset-right));
+  z-index: 12;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  pointer-events: none;
+}
+
+.title-lockup {
+  pointer-events: auto;
+  min-width: max-content;
+  padding: 8px 16px 10px;
+  border-radius: 18px 18px 18px 5px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(255, 220, 239, 0.78));
+  box-shadow: 0 10px 16px rgba(63, 32, 99, 0.2), inset 0 1px 0 #fff;
+}
+
+.eyebrow {
+  color: #ae2979;
+}
+
+h1 {
+  font-size: clamp(30px, 4vw, 52px);
+  color: #b62e91;
+  text-shadow: 0 2px 0 #fff, 0 4px 0 #ff9bd0, 0 10px 18px rgba(99, 35, 119, 0.25);
+}
+
+.area {
+  display: none;
+}
+
+.wallet {
+  display: flex;
+  gap: 7px;
+  margin-left: auto;
+  pointer-events: auto;
+}
+
+.wallet li {
+  min-width: 70px;
+  border: 2px solid rgba(255, 255, 255, 0.74);
+  border-radius: 16px 16px 6px 16px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(215, 246, 239, 0.72));
+  box-shadow: 0 8px 14px rgba(40, 94, 105, 0.18), inset 0 1px 0 #fff;
+}
+
+.looks-btn {
+  pointer-events: auto;
+  min-height: 48px;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  background: linear-gradient(180deg, #fff3a8, #ff84c2);
+  color: #7f276b;
+  box-shadow: 0 8px 14px rgba(91, 31, 95, 0.2), inset 0 1px 0 #fff;
+}
+
+.grounds {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+
+.city-brief {
+  position: absolute;
+  left: 50%;
+  top: max(10px, env(safe-area-inset-top));
+  z-index: 10;
+  width: min(340px, 42vw);
+  transform: translateX(-50%);
+  padding: 8px 16px;
+  border: 2px solid rgba(255, 255, 255, 0.72);
+  border-radius: 16px 16px 24px 24px;
+  background: rgba(255, 252, 240, 0.78);
+  box-shadow: 0 8px 14px rgba(72, 34, 91, 0.16), inset 0 1px 0 #fff;
+}
+
+.brief-title {
+  color: #a43d86;
+}
+
+.brief-detail {
+  font-size: 12px;
+}
+
+.frontage {
+  display: none;
+}
+
+.plaza-lot {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+
+.plot {
+  position: absolute;
+  inset: 0;
+  min-height: 0;
+  overflow: hidden;
+  border-radius: 0;
+  background:
+    radial-gradient(ellipse at 50% 54%, rgba(255, 255, 255, 0.34), transparent 42%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.08), transparent 40%),
+    linear-gradient(180deg, transparent 0 32%, rgba(45, 161, 124, 0.32) 32% 100%);
+  box-shadow: none;
+  perspective: 1100px;
+}
+
+.plot::before {
+  inset: 25% 10% 6%;
+  border-radius: 50% 45% 38% 42%;
+  background:
+    radial-gradient(circle at 14% 24%, #fff3a7 0 4px, transparent 5px),
+    radial-gradient(circle at 84% 20%, #fff 0 4px, transparent 5px),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.24), rgba(56, 181, 121, 0.12));
+  box-shadow: none;
+  transform: rotateX(16deg);
+}
+
+.plot::after {
+  right: 7%;
+  bottom: 10%;
+  width: 18%;
+  height: 12%;
+  opacity: 0.7;
+}
+
+.world-water,
+.world-path,
+.world-sparkles {
+  position: absolute;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.world-water {
+  left: -4%;
+  right: -4%;
+  bottom: -4%;
+  height: 24%;
+  border-radius: 50% 50% 0 0;
+  background:
+    radial-gradient(ellipse at 35% 24%, rgba(255, 255, 255, 0.72) 0 2px, transparent 3px),
+    radial-gradient(ellipse at 72% 38%, rgba(255, 255, 255, 0.62) 0 2px, transparent 3px),
+    linear-gradient(180deg, rgba(98, 226, 228, 0.86), rgba(43, 137, 190, 0.86));
+  box-shadow: inset 0 12px 20px rgba(255, 255, 255, 0.34), 0 -8px 0 rgba(104, 202, 132, 0.42);
+}
+
+.world-path {
+  left: 17%;
+  top: 31%;
+  width: 66%;
+  height: 56%;
+  border-radius: 50%;
+  border: 22px solid rgba(255, 218, 158, 0.48);
+  transform: rotate(-8deg);
+  box-shadow: 0 0 0 7px rgba(255, 255, 255, 0.16);
+}
+
+.world-sparkles {
+  inset: 20% 12% 22%;
+  background:
+    radial-gradient(circle at 12% 20%, #fff 0 3px, transparent 4px),
+    radial-gradient(circle at 87% 15%, #ffe36e 0 3px, transparent 4px),
+    radial-gradient(circle at 8% 70%, #ff86cc 0 3px, transparent 4px),
+    radial-gradient(circle at 92% 78%, #fff 0 3px, transparent 4px),
+    radial-gradient(circle at 48% 8%, #fff 0 2px, transparent 3px);
+}
+
+.sockets {
+  inset: 16% 15% 18%;
+  z-index: 5;
+  transform: rotateX(16deg);
+  transform-origin: center bottom;
+}
+
+.socket {
+  border-radius: 50%;
+  transform: translateY(var(--world-lift, 0px)) scale(1.02);
+}
+
+.socket.drop-hover {
+  transform: translateY(calc(var(--world-lift, 0px) - 8px)) scale(1.12);
+}
+
+.socket-well {
+  opacity: 0.35;
+  background: radial-gradient(ellipse, rgba(26, 86, 76, 0.42), transparent 68%);
+  box-shadow: none;
+}
+
+.jewel-body {
+  width: min(118px, 112%);
+  box-shadow:
+    0 24px 30px var(--jewel-glow, rgba(255, 77, 141, 0.62)),
+    inset 0 -16px 18px rgba(24, 8, 24, 0.2),
+    inset 0 10px 15px rgba(255, 255, 255, 0.58),
+    inset 0 0 0 2px rgba(255, 255, 255, 0.34);
+}
+
+.jewel-mark {
+  font-size: 30px;
+  text-shadow: 0 2px 0 #fff, 0 0 10px rgba(255, 255, 255, 0.8);
+}
+
+.jewel-name {
+  margin-top: 5px;
+  font-size: 13px;
+  color: #fff;
+  text-shadow: 0 2px 3px #4a2963;
+}
+
+.jewel-stack {
+  top: 2%;
+  right: 1%;
+  min-width: 28px;
+  height: 28px;
+  border: 2px solid #fff;
+  background: linear-gradient(180deg, #ff72bd, #a83f9b);
+  box-shadow: 0 5px 8px rgba(71, 22, 79, 0.25);
+}
+
+.apron {
+  position: absolute;
+  left: 50%;
+  bottom: max(10px, env(safe-area-inset-bottom));
+  z-index: 12;
+  width: min(680px, 76vw);
+  margin: 0;
+  transform: translateX(-50%);
+  border: 2px solid rgba(255, 255, 255, 0.78);
+  background: rgba(255, 250, 244, 0.82);
+  box-shadow: 0 14px 24px rgba(57, 27, 74, 0.24), inset 0 1px 0 #fff;
+}
+
+.stage-foot {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 4px;
+  z-index: 13;
+  pointer-events: none;
+}
+
+.stage-foot button,
+.stage-foot .toast {
+  pointer-events: auto;
+}
+
+@media (orientation: portrait) and (max-width: 700px) {
+  .float-hud {
+    transform: scale(0.84);
+    transform-origin: top left;
+    right: auto;
+    width: 118%;
+  }
+
+  .city-brief {
+    top: 82px;
+    width: 72vw;
+  }
+
+  .sockets {
+    inset: 20% 8% 22%;
+  }
+
+  .jewel-body {
+    width: min(92px, 116%);
+  }
+
+  .apron {
+    width: 94vw;
+  }
+}
