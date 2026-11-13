@@ -154,6 +154,16 @@ export function BoardView({
     handleTap(from);
   };
 
+  // Touch gestures may be canceled by the browser or OS (e.g. interruption).
+  // Clear the refs as well as visual drag state so the next gesture starts fresh.
+  const handlePointerCancel = () => {
+    originRef.current = null;
+    startRef.current = null;
+    draggingRef.current = false;
+    setDragging(null);
+    setHover(null);
+  };
+
   const dragItem = dragging
     ? catalog.getItem(getCell(state.board, dragging)?.items[0]?.itemId ?? "")
     : undefined;
@@ -241,6 +251,7 @@ export function BoardView({
                 onPointerDown={(event) => handlePointerDown(coord, event)}
                 onPointerMove={handlePointerMove}
                 onPointerUp={handlePointerUp}
+                onPointerCancel={handlePointerCancel}
                 onKeyDown={(event) => {
                   if (event.key === "Enter" || event.key === " ") {
                     event.preventDefault();
