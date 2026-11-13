@@ -146,8 +146,12 @@ export function BoardView({
     if (wasDragging) {
       const to = coordFromPoint(event.clientX, event.clientY);
       if (to && !coordsEqual(from, to)) {
-        onDrop(from, to);
-        onSelect(to);
+        const kind = describeDrop(state.board, from, to);
+        // Invalid drops must not change selection or trigger a game action.
+        if (kind !== "invalid") {
+          onDrop(from, to);
+          onSelect(to);
+        }
       }
       return;
     }
