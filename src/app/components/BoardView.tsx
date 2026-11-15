@@ -146,12 +146,26 @@ export function BoardView({
     if (wasDragging) {
       const to = coordFromPoint(event.clientX, event.clientY);
       if (to && !coordsEqual(from, to)) {
-        onDrop(from, to);
-        onSelect(to);
+        const kind = describeDrop(state.board, from, to);
+        // Invalid drops must not change selection or trigger a game action.
+        if (kind !== "invalid") {
+          onDrop(from, to);
+          onSelect(to);
+        }
       }
       return;
     }
     handleTap(from);
+  };
+
+  // Touch gestures may be canceled by the browser or OS (e.g. interruption).
+  // Clear the refs as well as visual drag state so the next gesture starts fresh.
+  const handlePointerCancel = () => {
+    originRef.current = null;
+    startRef.current = null;
+    draggingRef.current = false;
+    setDragging(null);
+    setHover(null);
   };
 
   const dragItem = dragging
@@ -241,6 +255,7 @@ export function BoardView({
                 onPointerDown={(event) => handlePointerDown(coord, event)}
                 onPointerMove={handlePointerMove}
                 onPointerUp={handlePointerUp}
+                onPointerCancel={handlePointerCancel}
                 onKeyDown={(event) => {
                   if (event.key === "Enter" || event.key === " ") {
                     event.preventDefault();
